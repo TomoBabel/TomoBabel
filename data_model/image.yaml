@@ -1,0 +1,67 @@
+name: CETMDImage
+id: https://w3id.org/cetmd/image/
+version: 0.0.1
+description: Schema for cryoET alignments
+prefixes:
+  linkml: https://w3id.org/linkml/
+  image: https://w3id.org/cetmd/image/
+
+default_prefix: image
+
+imports:
+- linkml:types
+- ./coordinate_systems
+
+slots:
+  width:
+    description: The width of the image (x-axis) in pixels
+    range: integer
+  height:
+    description: The height of the image (y-axis) in pixels
+    range: integer
+  depth:
+    description: The depth of the image (z-axis) in pixels
+    range: integer
+  coordinate_systems:
+    description: Named coordinate systems for this entity
+    range: CoordinateSystem
+    multivalued: true
+  coordinate_transformations:
+    description: Named coordinate systems for this entity
+    range: CoordinateTransformation
+    multivalued: true
+
+classes:
+  Image2D:
+    description: A 2D image.
+    slots:
+      - width
+      - height
+      - coordinate_systems
+      - coordinate_transformations
+
+  Image3D:
+    description: A 3D image.
+    slots:
+      - width
+      - height
+      - depth
+      - coordinate_systems
+      - coordinate_transformations
+
+  ImageStack2D:
+    description: A stack of 2D images.
+    attributes:
+      images:
+        description: The images in the stack
+        range: Image2D
+        multivalued: true
+
+  ImageStack3D:
+    description: A stack of 3D images.
+    attributes:
+      images:
+        description: The images in the stack
+        range: Image3D
+        multivalued: true
+

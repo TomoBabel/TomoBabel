@@ -1,0 +1,87 @@
+name: CETMDEntities
+id: https://w3id.org/cetmd/entities
+version: 0.0.1
+description: Schema for cryoET geometry
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  image_entities: https://w3id.org/cetmd/imageentities/
+  entities: https://w3id.org/cetmd/entities/
+  annotation: https://w3id.org/cetmd/annotation/
+
+default_prefix: entities
+
+imports:
+- linkml:types
+- ./image_entities
+- ./annotation
+
+classes:
+  Region:
+    description: Raw data (movie stacks) and derived data (tilt series, tomograms, annotations) from a single region of
+      a specimen.
+    attributes:
+      movie_stack_collections:
+        description: The movie stack
+        range: MovieStackCollection
+        multivalued: true
+      tilt_series:
+        description: The tilt series
+        range: TiltSeries
+        multivalued: true
+      alignments:
+        description: The alignments
+        range: Alignment
+        multivalued: true
+      tomograms:
+        description: The tomograms
+        range: Tomogram
+        multivalued: true
+      annotations:
+        description: The annotations for this region
+        range: Annotation
+        multivalued: true
+
+  Average:
+    description: A particle averaging experiment.
+    attributes:
+      name:
+        description: The name of the averaging experiment.
+        range: string
+      particle_maps:
+        description: The particle maps
+        range: ParticleMap
+        multivalued: true
+      annotations:
+        description: The annotations
+        range: Annotation
+        multivalued: true
+
+  MovieStackCollection:
+    description: A collection of movie stacks using the same gain and defect files.
+    attributes:
+      movie_stacks:
+        description: The movie stacks in the collection
+        range: MovieStackSeries
+        multivalued: true
+      GainFile:
+        description: The gain file for the movie stacks
+        range: GainFile
+      DefectFile:
+        description: The defect file for the movie stacks
+        range: DefectFile
+
+  Dataset:
+    description: A dataset
+    attributes:
+      name:
+        description: The name of the dataset
+        range: string
+      regions:
+        description: The regions in the dataset
+        range: Region
+        multivalued: true
+      averages:
+        description: The averages in the dataset
+        range: Average
+        multivalued: true

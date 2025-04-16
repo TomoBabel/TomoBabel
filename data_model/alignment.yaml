@@ -1,0 +1,45 @@
+name: CETMDAlignment
+id: CETMDAlignment
+version: 0.0.1
+description: Schema for cryoET alignments
+prefixes:
+  linkml: https://w3id.org/linkml/
+  alignment: https://w3id.org/cetmd/alignment/
+  coord_transforms: https://w3id.org/cetmd/coord_transforms/
+
+default_prefix: alignment
+
+imports:
+- linkml:types
+- ./coordinate_transforms
+
+classes:
+  ProjectionAlignment:
+    is_a: Sequence
+    description: The tomographic alignment for a single projection.
+    attributes:
+      input:
+        description: The source coordinate system name
+        range: string
+      output:
+        description: The target coordinate system name
+        range: string
+      sequence:
+        description: The sequence of transformations
+        range: CoordinateTransformation
+        maximum_cardinality: 2
+        any_of:
+          - range: Affine
+          - range: Translation
+        multivalued: true
+
+  Alignment:
+    description: The tomographic alignment for a tilt series.
+    attributes:
+        projection_alignments:
+          description: alignment for a specific projection
+          range: ProjectionAlignment
+          multivalued: true
+
+
+

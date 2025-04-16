@@ -1,0 +1,60 @@
+name: CETMDCoordinateSystems
+id: https://w3id.org/cetmd/coordinate_systems
+version: 0.0.1
+description: Schema for cryoET alignments
+imports:
+- linkml:types
+prefixes:
+  linkml: https://w3id.org/linkml/
+  coordinate_systems: https://w3id.org/cetmd/coordinate_systems/
+
+default_prefix: coordinate_systems
+
+slots:
+  axis_name:
+    description: The name of the axis
+    range: string
+  axis_unit:
+    description: The unit of the axis
+    range: string
+    ifabsent: angstrom
+  axis_type:
+    description: The type of axis
+    range: AxisType
+
+classes:
+  Axis:
+    description: An axis in a coordinate system
+    attributes:
+      name:
+        exact_mappings:
+          - axis_name
+        required: true
+      axis_unit:
+        exact_mappings:
+          - axis_unit
+      axis_type:
+        exact_mappings:
+          - axis_type
+
+  CoordinateSystem:
+    description: A coordinate system
+    attributes:
+      name:
+        description: The name of the coordinate system
+        range: string
+        required: true
+      axes:
+        description: The axes of the coordinate system
+        range: Axis
+        required: true
+        multivalued: true
+
+enums:
+  AxisType:
+    description: The type of axis
+    permissible_values:
+      space:
+        description: A spatial axis
+      array:
+        description: An array axis

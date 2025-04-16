@@ -1,0 +1,199 @@
+name: CETMDAnnotation
+id: https://w3id.org/cetmd/annotation
+version: 0.0.1
+description: Schema for cryoET alignments
+prefixes:
+  linkml: https://w3id.org/linkml/
+  image: https://w3id.org/cetmd/image/
+  annotations: https://w3id.org/cetmd/annotation/
+
+default_prefix: annotation
+
+imports:
+- linkml:types
+- ./image
+- ./coordinate_systems
+- ./coordinate_transforms
+
+slots:
+  - origin2D:
+      description: Location on a 2D image (Nx2).
+      range: float
+      array:
+        exact_number_dimensions: 2
+        dimensions:
+          - alias: N
+            minimum_cardinality: 1
+          - alias: xy
+            exact_cardinality: 2
+  - translation2D:
+      description: Offset from the origin of a point on a 2D image (Nx2).
+      range: float
+      array:
+        exact_number_dimensions: 2
+        dimensions:
+          - alias: N
+            minimum_cardinality: 1
+          - alias: xy
+            exact_cardinality: 2
+  - vector2D:
+      description: Orientation vector associated with a point on a 2D image (Nx2).
+      range: float
+      array:
+        exact_number_dimensions: 2
+        dimensions:
+          - alias: N
+            minimum_cardinality: 1
+          - alias: xy
+            exact_cardinality: 2
+  - matrix2D:
+      description: Rotation matrix associated with a point on a 2D image (Nx2x2).
+      range: float
+      array:
+        exact_number_dimensions: 3
+        dimensions:
+          - alias: N
+            minimum_cardinality: 1
+          - alias: xy
+            exact_cardinality: 2
+          - alias: xy
+            exact_cardinality: 2
+
+  - origin3D:
+      description: Location on a 3D image (Nx3).
+      range: float
+      array:
+        exact_number_dimensions: 2
+        dimensions:
+          - alias: N
+            minimum_cardinality: 1
+          - alias: xyz
+            exact_cardinality: 3
+  - translation3D:
+      description: Offset from the origin of a point on a 3D image (Nx3).
+      range: float
+      array:
+        exact_number_dimensions: 2
+        dimensions:
+          - alias: N
+            minimum_cardinality: 1
+          - alias: xyz
+            exact_cardinality: 3
+  - vector3D:
+      description: Orientation vector associated with a point on a 3D image (Nx3).
+      range: float
+      array:
+        exact_number_dimensions: 2
+        dimensions:
+          - alias: N
+            minimum_cardinality: 1
+          - alias: xyz
+            exact_cardinality: 3
+  - matrix3D:
+      description: Rotation matrix associated with a point on a 3D image (Nx3x3).
+      range: float
+      array:
+        exact_number_dimensions: 3
+        dimensions:
+          - alias: N
+            minimum_cardinality: 1
+          - alias: xyz
+            exact_cardinality: 3
+          - alias: xyz
+            exact_cardinality: 3
+
+classes:
+  CoordMetaMixin:
+    description: Coordinate system mixins for annotations.
+    slots:
+      - coordinate_systems
+      - coordinate_transformations
+
+  Annotation:
+    description: A primitive annotation.
+    slots:
+      - path
+
+  SegmentationMask2D:
+    is_a: Annotation
+    mixins:
+      - Image2D
+    description: An annotation image with categorical labels.
+
+  SegmentationMask3D:
+    is_a: Annotation
+    mixins:
+      - Image3D
+    description: An annotation volume with categorical labels.
+
+  ProbabilityMap2D:
+    is_a: Annotation
+    mixins:
+      - Image2D
+    description: An annotation image with real-valued labels.
+
+  ProbabilityMap3D:
+    is_a: Annotation
+    mixins:
+      - Image3D
+    description: An annotation volume with real-valued labels.
+
+  PointSet2D:
+    is_a: Annotation
+    mixins:
+      - CoordMetaMixin
+    description: A set of 2D point annotations.
+    slots:
+      - origin2D
+
+  PointSet3D:
+    is_a: Annotation
+    mixins:
+      - CoordMetaMixin
+    description: A set of 3D point annotations.
+    slots:
+      - origin3D
+
+  PointVectorSet2D:
+    is_a: Annotation
+    mixins:
+      - CoordMetaMixin
+    description: A set of 2D points with an associated direction vector.
+    slots:
+      - origin2D
+      - vector2D
+
+  PointVectorSet3D:
+    is_a: Annotation
+    mixins:
+      - CoordMetaMixin
+    description: A set of 3D points with an associated direction vector.
+    slots:
+      - origin3D
+      - vector3D
+
+  PointMatrixSet2D:
+    is_a: Annotation
+    mixins:
+      - CoordMetaMixin
+    description: A set of 2D points with an associated rotation matrix.
+    slots:
+      - origin2D
+      - matrix2D
+
+  PointMatrixSet3D:
+    is_a: Annotation
+    mixins:
+      - CoordMetaMixin
+    description: A set of 3D points with an associated rotation matrix.
+    slots:
+      - origin3D
+      - matrix3D
+
+  TriMesh:
+    is_a: Annotation
+    mixins:
+      - CoordMetaMixin
+    description: A mesh annotation.
+
+

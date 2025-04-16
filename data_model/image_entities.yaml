@@ -1,0 +1,141 @@
+name: CETMDImageEntities
+id: https://w3id.org/cetmd/imageentities
+version: 0.0.1
+description: Schema for cryoET alignments
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  image_entities: https://w3id.org/cetmd/imageentities/
+
+default_prefix: image_entities
+
+imports:
+- linkml:types
+- ./image
+- ./coordinate_systems
+- ./coordinate_transforms
+- ./alignment
+
+slots:
+  path:
+    description: Path to a file.
+    range: string
+  section:
+    description: 0-based section index to the entity inside a stack.
+  nominal_tilt_angle:
+    description: The tilt angle reported by the microscope
+    range: float
+  accumulated_dose:
+    description: The pre-exposure up to this image in e-/A^2
+    range: float
+  defocus_u:
+    description: Estimated defocus U for this image in Angstrom, underfocus positive.
+    range: float
+  defocus_v:
+    description: Estimated defocus V for this image in Angstrom, underfocus positive.
+    range: float
+  defocus_angle:
+    description: Estimated angle of astigmatism.
+    range: float
+  particle_index:
+    description: Index of a particle inside a tomogram.
+    range: integer
+  ctf_metadata:
+    description: A set of CTF patameters for an image.
+    range: CTFMetadata
+
+classes:
+  CTFMetadata:
+    description: A set of CTF patameters for an image.
+    slots:
+      - defocus_u
+      - defocus_v
+      - defocus_angle
+
+  AcquisitionMetadataMixin:
+    description: Metadata concerning the acquisition process.
+    slots:
+      - nominal_tilt_angle
+      - accumulated_dose
+      - ctf_metadata
+
+  GainFile:
+    is_a: Image2D
+    description: A gain reference file.
+    slots:
+      - path
+
+  DefectFile:
+    is_a: Image2D
+    description: A detector defect file.
+    slots:
+      - path
+
+  MovieFrame:
+    is_a: Image2D
+    mixins:
+      - AcquisitionMetadataMixin
+    description: An individual movie frame
+    slots:
+      - path
+      - section
+
+  MovieStack:
+    description: A stack of movie frames.
+    attributes:
+      images:
+        description: The movie frames in the stack
+        range: MovieFrame
+        multivalued: true
+      path:
+        range: string
+
+  ProjectionImage:
+    is_a: Image2D
+    mixins:
+      - AcquisitionMetadataMixin
+    description: A projection image.
+    slots:
+      - path
+      - section
+
+  MovieStackSeries:
+    description: A group of movie stacks that belong to a single tilt series.
+    attributes:
+      stacks:
+        description: The movie stacks.
+        range: MovieStack
+        multivalued: true
+
+  TiltSeries:
+    description: A stack of projection images.
+    attributes:
+      images:
+        description: The projections in the stack
+        range: ProjectionImage
+        multivalued: true
+      path:
+        range: string
+
+  SubProjectionImage:
+    is_a: ProjectionImage
+    description: A croppecd projection image.
+    slots:
+      - particle_index
+
+  Tomogram:
+    is_a: Image3D
+    description: A 3D tomogram.
+    slots:
+      - path
+
+  ParticleMap:
+    is_a: Image3D
+    description: A 3D particle density map.
+    slots:
+      - path
+
+
+
+
+
