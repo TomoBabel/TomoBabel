@@ -7,7 +7,7 @@ schema_path = Path("data_model/entities.yaml")
 output_path = Path("tomobabel/models/models.py")
 
 # Generate the models
-output_code = PydanticGenerator(schema_path).serialize()
+output_code = PydanticGenerator(schema_path, metadata_mode=None).serialize()
 
 # Read existing model
 with open("tomobabel/models/models.py") as existing:

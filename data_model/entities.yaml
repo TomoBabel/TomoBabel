@@ -64,10 +64,10 @@ classes:
         description: The movie stacks in the collection
         range: MovieStackSeries
         multivalued: true
-      GainFile:
+      gain_file:
         description: The gain file for the movie stacks
         range: GainFile
-      DefectFile:
+      defect_file:
         description: The defect file for the movie stacks
         range: DefectFile
 

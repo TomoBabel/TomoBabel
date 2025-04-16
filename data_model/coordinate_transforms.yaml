@@ -101,7 +101,7 @@ classes:
         ifabsent: affine
       affine:
         description: The affine matrix
-        range: integer
+        range: float
         array:
           exact_number_dimensions: 2
           dimensions:
