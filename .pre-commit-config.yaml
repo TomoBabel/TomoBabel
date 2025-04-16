@@ -1,9 +1,15 @@
 repos:
   - repo: local
     hooks:
-      - id: generate-linkml-models
+      - id: update-linkml-models
         name: Check for changes in LinkML Pydantic models
         entry: ./scripts/update_models.py
+        language: script
+        files: ^data_model/.*\.yaml$
+        pass_filenames: false
+      - id: update-stubs
+        name: Update model stubs
+        entry: ./scripts/make_stubs.py
         language: script
         files: ^data_model/.*\.yaml$
         pass_filenames: false

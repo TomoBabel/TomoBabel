@@ -103,6 +103,7 @@ exclude = [
     "build",
     "dist",
     "venv",
+    "tomobabel/models/models.py"
 ]
 
 [tool.mypy]

@@ -17,7 +17,7 @@ with open("tomobabel/models/models.py") as existing:
 if current != output_code:
     print("🔄 Updating Pydantic models...")
     with open(output_path, "w") as f:
-        f.write(output_code)
+        f.write("# type: ignore\n" + output_code)
 
 # Format with Black (in place)
 print("🎨 Formatting with black (in place)...")
