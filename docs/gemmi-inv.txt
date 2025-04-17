@@ -1,0 +1,10 @@
+# Sphinx inventory version 2
+# Project: gemmi
+# Version: 0
+# Sphinx requires a compressed version of this file, saved in gemmi.inv.
+# If any changes are needed, make them here and then regenerate gemmi.inv using sphobjinv:
+#   `sphobjinv convert zlib gemmi-inv.txt gemmi.inv`
+gemmi.cif py:module 2 cif.html -
+gemmi.cif.Document py:class 2 cif.html#document -
+gemmi.cif.Block py:class 2 cif.html#block -
+gemmi.cif.Table py:class 2 cif.html#table -

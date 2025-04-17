@@ -16,7 +16,7 @@ from unittest.mock import patch
 
 from tomobabel.tests.converters.relion import test_data
 from tomobabel.tests.converters.relion.relion_testing_utils import setup_tomo_dirs
-from tomobabel.converters.relion import relion_converter_script
+from tomobabel.converters.relion import relion_converter
 
 
 class CziiConverterTest(unittest.TestCase):
@@ -41,7 +41,7 @@ class CziiConverterTest(unittest.TestCase):
     def test_main_with_ctf_data(self, mockdims):
         mockdims.return_value = 2000, 2000
         setup_tomo_dirs()
-        dataset = relion_converter_script.main(
+        dataset = relion_converter.main(
             [
                 "--tilt_series_starfile",
                 "CtfFind/job003/tilt_series_ctf.star",

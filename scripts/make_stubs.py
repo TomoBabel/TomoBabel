@@ -114,7 +114,7 @@ class CoordinateSystem(ConfiguredBaseModel):
 
 """
 
-with open("tomobabel/models/stubs/models.pyi", "w") as outfile:
+with open("tomobabel/models/models.pyi", "w") as outfile:
     outfile.write(oddballs)
     classes = get_class_attrs()
     for cls in classes:

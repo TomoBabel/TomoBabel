@@ -111,6 +111,7 @@ files = ["tomobabel", "tests"]
 python_version = "3.9"
 warn_unused_configs = true
 exclude = 'tomobabel/models/models\.py$'
+mypy_path = ['tomobabel/models/stubs']
 
 [[tool.mypy.overrides]]
 module = ["gemmi", "mrcfile"]
