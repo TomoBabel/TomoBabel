@@ -1,21 +1,18 @@
 Developer Setup
 ---------------
 
-First get ``pdm`` to manage dependencies and then install TomoBabel
+First install TomoBabel
 
 .. code-block::
 
- pip install pdm
- pdm install
+ pip install -e .
 
-Next add the dev and docs dependencies
+Next install the dec dependencies
 
 .. code-block::
 
- pdm lock -G dev
- pddm install -dG dev
- pdm lock -G docs
- pddm install -dG docs
+ pip install -e .[dev]
+ pip install -e .[docs]
 
 Finally install the pre-commit hooks
 
@@ -25,6 +22,6 @@ Finally install the pre-commit hooks
 
 .. warning::
 
- It is important to always allow pre-commit to run before commiting to the project.
+ It is important to always allow pre-commit to run before committing to the project.
  The pre-commit hooks run scripts that keep the data model up to date.
 
