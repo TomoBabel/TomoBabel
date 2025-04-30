@@ -7,7 +7,7 @@ from typing import Optional, List
 from tomobabel.converters.relion.relion_convert_tilt_series import (
     PipelinerTiltSeriesGroupConverter,
 )
-from tomobabel.models.models import Dataset, Region
+from tomobabel.models.top_level import DataSet, Region, TiltSeries
 
 
 def get_tilt_series_data(
@@ -96,7 +96,7 @@ def get_arguments() -> argparse.ArgumentParser:
     return parser
 
 
-def main(in_args=None) -> Dataset:
+def main(in_args=None) -> DataSet:
     """Do conversions and output a single czii Dataset object
 
     Each tilt series/tomogram is given a Region.
@@ -118,14 +118,13 @@ def main(in_args=None) -> Dataset:
         args.defect_file,
     )
     for tilt_series in converted_tilt_series.all_tilt_series:
-        region = Region(
-            movie_stack_collections=[
-                converted_tilt_series.all_movie_collections[tilt_series]
-            ],
-            tilt_series=[converted_tilt_series.all_tilt_series[tilt_series]],
-        )
+        movie_stack_collections = converted_tilt_series.all_movie_collections[
+            tilt_series
+        ]
+        tiltseries_container = TiltSeries(raw_movies=movie_stack_collections)
+        region = Region(tilt_series=[tiltseries_container])
         regions.append(region)
-    dataset = Dataset(regions=regions)
+    dataset = DataSet(regions=regions)
 
     # TODO: Add the other data types to the appropriate Regions
 

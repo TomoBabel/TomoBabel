@@ -7,17 +7,20 @@ from typing import Optional, List, Dict, Tuple
 
 from gemmi import cif
 
-from tomobabel.models.models import (
-    MovieStackSeries,
+from tomobabel.models.top_level import TiltSeries
+
+from tomobabel.models.transformations import AffineTransform
+
+from tomobabel.models.tilt_series import (
     MovieStackCollection,
     MovieStack,
     MovieFrame,
     CTFMetadata,
-    Affine,
-    TiltSeries,
-    ProjectionImage,
     GainFile,
     DefectFile,
+    TiltSeriesMicrograph,
+    TiltSeriesMicrographStack,
+    MovieStackSeries,
 )
 from tomobabel.utils import get_mrc_dims, generate_affine_matrix
 
@@ -122,7 +125,7 @@ class RelionTiltSeriesMovie(object):
         self.width = dims[0]
         self.n_frames = n_frames
         self.apix = apix
-        self.czii_movie_stack = MovieStack(path=str(stack_file_path))
+        self.czii_movie_stack = MovieStack(images=[], path=str(stack_file_path))
 
 
 class PipelinerTiltSeriesGroupConverter(object):
@@ -310,7 +313,7 @@ class PipelinerTiltSeriesGroupConverter(object):
     @staticmethod
     def get_transformation_data(
         data_block: cif.Block, index: int, apix: float
-    ) -> Optional[Affine]:
+    ) -> Optional[AffineTransform]:
         """Get transformation data for a single frame in a tilt series movie
 
         Args:
@@ -344,7 +347,9 @@ class PipelinerTiltSeriesGroupConverter(object):
             affine_matrix = generate_affine_matrix(
                 xshift, yshift, xtilt, ytilt, rot, "ZYZ"
             )
-            transformation_obj = Affine(type="affine", affine=affine_matrix.tolist())
+            transformation_obj = AffineTransform(
+                type="affine", affine=affine_matrix.tolist()
+            )
 
         return transformation_obj
 
@@ -372,14 +377,14 @@ class PipelinerTiltSeriesGroupConverter(object):
                     height=mov.height,
                     width=mov.width,
                     ctf_metadata=ctf_obj,
-                    coordinate_transformations=None if trans is None else [trans],
+                    motion_correction_transformations=[] if trans is None else [trans],
                 )
             )
 
         # update the MovieStack
         mov.czii_movie_stack.images = mov.czii_movie_frames
 
-    def make_tilt_series_object(self, path, stacks) -> TiltSeries:
+    def make_tilt_series_object(self, path, stacks) -> TiltSeriesMicrographStack:
         """Make a CZII TiltSeries object for a tilt series
 
         Args:
@@ -389,19 +394,18 @@ class PipelinerTiltSeriesGroupConverter(object):
         Returns:
             TiltSeries: A CZII tilt serie object for the tilt series
         """
-        ts_obj = TiltSeries(path=path, images=[])
-        for n, mss in enumerate(stacks.stacks):
+        ts_obj = TiltSeriesMicrographStack(path=path, micrographs=[])
+        for mss in stacks.movie_stacks:
             img = mss.images[-1]
-            proj_img = ProjectionImage(
+            proj_img = TiltSeriesMicrograph(
                 path=img.path,
-                section=str(n),
                 nominal_tilt_angle=img.nominal_tilt_angle,
-                accumulated_dose=img.accumulated_dose,
+                total_accumulated_dose=img.accumulated_dose,
                 ctf_metadata=img.ctf_metadata,
                 width=img.width,
                 height=img.height,
             )
-            ts_obj.images.append(proj_img)  # type: ignore  # always an empty list
+            ts_obj.micrographs.append(proj_img)  # type: ignore  # always an empty list
         return ts_obj
 
     def get_tilt_series_files(self):
@@ -457,7 +461,9 @@ class PipelinerTiltSeriesGroupConverter(object):
                 self.make_movie_collections(tilt_series_block, n, mov)
 
             # make the MovieStackSeries objects
-            ms_series = MovieStackSeries(stacks=[x.czii_movie_stack for x in movies])
+            ms_series = MovieStackSeries(
+                movie_stacks=[x.czii_movie_stack for x in movies]
+            )
             gainfile, defectfile = self.get_gain_ref_and_defect_file()
             collection = MovieStackCollection(
                 movie_stacks=[ms_series],
