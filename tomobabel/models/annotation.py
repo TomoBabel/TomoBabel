@@ -17,7 +17,6 @@ class AnnotationType(str, Enum):
     cuboid = "cuboid"
     vector = "vector"
     ovoid = "ovoid"
-    box = "box"
     shell = "shell"
     spline = "spline"
     cylinder = "cylinder"
@@ -111,30 +110,35 @@ class Ovoid(Vector):
     )
 
     def model_post_init(self, __context) -> None:
+        # calculate the waist point if not given
         if not self.waist_point:
             mids = (self.start.coord_array + self.end.coord_array) / 2
             self.waist_point = Point(
                 coords=CoordsLogical(x=mids[0, 0], y=mids[1, 0], z=mids[2, 0])
             )
+        # verify waist point is on the central vector
+        v = self.end.coord_array - self.start.coord_array
+        w = self.waist_point.coord_array - self.start.coord_array
+
+        v_flat = v.flatten()
+        w_flat = w.flatten()
+
+        is_colinear = np.allclose(np.cross(v_flat, w_flat), 0)
+
+        dot_vv = np.dot(v_flat, v_flat)
+        t = np.dot(w_flat, v_flat) / dot_vv
+        if not (is_colinear and (0 <= t <= 1)):
+            raise ValueError("Ovoid waist point is not on central vector")
 
 
 class Cuboid(Vector):
-    """A cuboidal box defined by two vectors"""
+    """A cuboidal box defined by two or three vectors"""
 
     type: str = AnnotationType.cuboid
     center: Point
     v1: Vector
     v2: Vector
-
-
-class Box(Annotation):
-    """An irregular bounding volume defined a center point and 3 vectors"""
-
-    type: str = AnnotationType.box
-    center: Point
-    v1: Vector
-    v2: Vector
-    v3: Vector
+    v3: Optional[Vector]
 
 
 class Spline(Annotation):
@@ -142,7 +146,7 @@ class Spline(Annotation):
     points: List[Point] = Field(default=..., description="At least two points")
 
     @field_validator("points")
-    def at_least_three_points(cls, value=List[Point]) -> List[Point]:
+    def at_least_three_points(cls, value: List[Point]) -> List[Point]:
         if len(value) < 3:
             raise ValueError("A spline must have at least 3 points")
         return value
@@ -172,10 +176,10 @@ class Shell(Annotation):
     volume"""
 
     type: str = AnnotationType.shell
-    base: Union[Sphere, Cuboid, Ovoid, Cylinder, Box, Cone] = Field(
+    base: Union[Sphere, Cuboid, Ovoid, Cylinder, Cone] = Field(
         default=..., description="The base volume the cutouts will be subtracted from"
     )
-    cut_outs: List[Union[Sphere, Cuboid, Ovoid, Cylinder, Box, Cone]] = Field(
+    cut_outs: List[Union[Sphere, Cuboid, Ovoid, Cylinder, Cone]] = Field(
         default=..., description="These volumes will be subtracted from the base volume"
     )
 
@@ -205,7 +209,6 @@ class AnnotationSet(ConfiguredBaseModel):
 # see https://pydantic-docs.helpmanual.io/usage/models/#rebuilding-a-model
 
 AnnotationSet.model_rebuild()
-Box.model_rebuild()
 Cone.model_rebuild()
 Cuboid.model_rebuild()
 Cylinder.model_rebuild()

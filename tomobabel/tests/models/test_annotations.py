@@ -62,8 +62,28 @@ class AnnotationModelsTest(unittest.TestCase):
         sp = Sphere(coords=test_point1, diameter=10)
         assert (sp.coord_array == np.array([[10.0], [20.0], [30.0]])).all()
 
-    def test_ovoid_with_defined_waist_point(self):
+    def test_ovoid_with_default_waist_point(self):
         ovoid = Ovoid(start=test_point1, end=test_point2, waist_size=10)
         assert np.isclose(
             ovoid.waist_point.coord_array, np.array([[60], [70], [80]])
         ).all()
+
+    def test_ovoid_with_defined_waist_point(self):
+        ovoid = Ovoid(
+            start=test_point1,
+            end=test_point2,
+            waist_size=10,
+            waist_point=Point(coords=CoordsLogical(x=60, y=70, z=80)),
+        )
+        assert np.isclose(
+            ovoid.waist_point.coord_array, np.array([[60], [70], [80]])
+        ).all()
+
+    def test_ovoid_with_defined_waist_point_error_not_no_vector(self):
+        with self.assertRaises(ValueError):
+            Ovoid(
+                start=test_point1,
+                end=test_point2,
+                waist_size=10,
+                waist_point=Point(coords=CoordsLogical(x=1, y=2, z=3)),
+            )
