@@ -1,14 +1,18 @@
 import numpy as np
 from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
-from pydantic import Field, model_validator
+from pydantic import Field
 from enum import Enum
 
 metamodel_version = "None"
 version = "0.0.1"
 
 
-class AnnotationModel(BaseModel):
+class Annotation(BaseModel):
+    """
+    BaseClass to hold annotations
+    """
+
     model_config = ConfigDict(
         validate_assignment=True,
         validate_default=True,
@@ -18,13 +22,15 @@ class AnnotationModel(BaseModel):
         strict=False,
     )
 
-
-class Annotation(AnnotationModel):
     type: str = "text"
     text: str = Field(default="", description="Free text for annotation description")
 
 
 class ConfiguredBaseModel(BaseModel):
+    """
+    Base model with an annotation
+    """
+
     model_config = ConfigDict(
         validate_assignment=True,
         validate_default=True,
@@ -69,25 +75,6 @@ class Image3D(ConfiguredBaseModel):
     voxel_size: Optional[float] = Field(default=None, description="The pixel size in Å")
 
 
-class AxisOrigin(str, Enum):
-    """
-    Describes the origin of an axis
-    most common cases for a 2D image:
-        x is bottom and y is bottom:  0,0 is the bottom left of the image
-        x is bottom and y is top:  0,0 is at the top left of the image
-        x is center, y is center: 0,0 is at the center of the image
-    """
-
-    # 0 is at the low end of the axis, all values for coords on an image will be
-    # positive
-    bottom = "bottom"
-    # 0 is at the center, values for coords on an image can be positive or negative
-    centerpoint = "center"
-    # 0 is at the high end of the axis, all values in an image will be negative
-    # IE origin is at the bottom
-    top = "top"
-
-
 class CoordUnit(str, Enum):
     """
     Describes the units for a coordinate
@@ -97,43 +84,25 @@ class CoordUnit(str, Enum):
     pixel = "pixel/voxel"
 
 
-class CoordinateLogical(ConfiguredBaseModel):
-    axis_origin: str = AxisOrigin.centerpoint
-    unit: str = CoordUnit.angstrom
-    value: float = Field(default=..., description="The coordinate value")
-
-
-class CoordinatePhysical(ConfiguredBaseModel):
-    axis_origin: str = AxisOrigin.top
-    unit: str = CoordUnit.pixel
-    value: int = Field(default=..., description="The coordinate value")
-
-
 class CoordsPhysical(ConfiguredBaseModel):
     """
-    A 3D coordinate
+    A 3D coordinate in the physical coordinate system.  Units are in pixel/voxel,
+    0,0,0 is at the upper left of the image
     """
 
-    x: CoordinatePhysical = Field(default=..., description="x coord")
-    y: CoordinatePhysical = Field(default=..., description="y coord")
-    z: Optional[CoordinatePhysical] = Field(default=None, description="z coord")
+    # TODO: Is this really the origin we want? Would lower-left be better?
 
-    @model_validator(mode="after")
-    def units_match(self):
-        vals = [self.x, self.y]
-        if self.z:
-            vals.append(self.z)
-        if not (v.unit == vals[0].unit for v in vals):
-            raise ValueError("Coordinate axes must have the same units")
-        return self
+    x: int = Field(default=..., description="x coord")
+    y: int = Field(default=..., description="y coord")
+    z: Optional[int] = Field(default=None, description="z coord")
 
     @property
     def coord_array(self) -> np.ndarray:
         if not self.z:
             # pad 2D coords if necessary
-            return np.array([[self.x.value], [self.y.value], [1.0]])
+            return np.array([[self.x], [self.y], [1.0]])
         else:
-            return np.array([[self.x.value], [self.y.value], [self.z.value]])
+            return np.array([[self.x], [self.y], [self.z]])
 
 
 class CoordsLogical(ConfiguredBaseModel):
@@ -142,26 +111,20 @@ class CoordsLogical(ConfiguredBaseModel):
     0,0,0 is at the center of the image, units are in Ångstrom
     """
 
-    x: CoordinateLogical = Field(default=..., description="x coord")
-    y: CoordinateLogical = Field(default=..., description="y coord")
-    z: Optional[CoordinateLogical] = Field(default=None, description="z coord")
+    x: float = Field(default=..., description="x coord")
+    y: float = Field(default=..., description="y coord")
+    z: Optional[float] = Field(default=None, description="z coord")
 
     @property
     def coord_array(self) -> np.ndarray:
-        if not self.z:
-            # pad 2D coords if necessary
-            return np.array([[self.x], [self.y], 1])
-        else:
-            return np.array([[self.x], [self.y], [self.z]])
+        return np.array([[self.x], [self.y], [self.z]])
 
 
 # Model rebuilds
 # see https://pydantic-docs.helpmanual.io/usage/models/#rebuilding-a-model
 
 Annotation.model_rebuild()
-CoordinateLogical.model_rebuild()
 CoordsLogical.model_rebuild()
-CoordinatePhysical.model_rebuild()
 CoordsPhysical.model_rebuild()
 Image2D.model_rebuild()
 Image3D.model_rebuild()

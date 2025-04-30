@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 from enum import Enum
-from pydantic import Field, model_validator, field_validator
+from pydantic import Field, field_validator
 from typing import Optional, List, Union
-from math import sqrt
 
 from tomobabel.models.basemodels import ConfiguredBaseModel, CoordsLogical, Annotation
 from tomobabel.models.transformations import AffineTransform
@@ -37,6 +36,13 @@ class Point(Annotation):
 
     @property
     def coord_array(self) -> np.ndarray:
+        """Returns the coordinates as a numpy array
+
+        Returns:
+            np.ndarray: The coordinate array in a 3x1 array [[x], [y], [z]] if the
+            coords are 2D the array is padded with the [2,1] index as 1
+
+        """
         return self.coords.coord_array
 
 
@@ -47,57 +53,69 @@ class Vector(Annotation):
     start: Point
     end: Point
 
-    def points(self):
+    @property
+    def points(self) -> np.ndarray:
+        """
+        Get the start and end points of the vector as a 3x2 array
+
+        Returns:
+            np.ndarry: the start and end point arrays
+        """
         start_coords = self.start.coord_array
         end_coords = self.end.coord_array
-        return np.ndarray([start_coords, end_coords])
+        return np.array([start_coords, end_coords])
 
-    def vector(self):
+    @property
+    def vector(self) -> np.ndarray:
+        """
+        Get the vector as a 3x1 array
+
+        Returns:
+            np.ndarray: the vector array
+        """
         p1, p2 = self.points
         return p2 - p1
 
-    def unit_vector(self):
-        return np.linalg.norm(self.vector)
+    @property
+    def unit_vector(self) -> np.ndarray:
+        """
+        Get the unit vector as a 3x1 array
+
+        Returns:
+            np.ndarray: the unit vector array
+        """
+        norm = np.linalg.norm(self.vector)
+        return self.vector / norm
 
 
 class Sphere(Point):
     """A sphere of diameter 'diameter' centered on x,y,(z) coordinate"""
 
     type: str = AnnotationType.sphere
-    diameter = float = Field(default=..., description="The sphere diameter")
+    diameter: float = Field(default=..., description="The sphere diameter")
 
 
 class Ovoid(Vector):
-    """An 2D oval or 3D  ovoid with its widest point 'waist_size'along the vector at
-    'waist_distance' from the start point"""
+    """An 2D oval or 3D  ovoid with its widest point at 'waist_point' on the main
+    vector"""
 
     type: str = AnnotationType.ovoid
     waist_size: float = Field(
         default=..., description="The length across the ovoid at its widest point"
     )
-    waist_distace: Optional[float] = Field(
+    waist_point: Optional[Point] = Field(
         default=None,
         description=(
-            "The distance from the start point for the widest point of the ovoid"
+            "Coords of the point in the center vector where the ovoid is widest"
         ),
     )
 
-    @model_validator(mode="after")
-    def find_center(self):
-        """If waist distance is None put it at the middle of the center vector"""
-        if self.waist_distance:
-            return self
-        mid_x = (self.start.x + self.end.x) / 2
-        mid_y = (self.start.y + self.end.y) / 2
-        xd = self.start.x - mid_x
-        yd = self.start.y - mid_y
-        if not self.start.y:
-            self.waist_distace = sqrt(xd**2 + yd**2)
-        if self.start_z:
-            mid_z = (self.start.z + self.end.z) / 2
-            zd = self.start.z - mid_z
-            self.waist_distace = sqrt(xd**2 + yd**2 + zd**2)
-        return self
+    def model_post_init(self, __context) -> None:
+        if not self.waist_point:
+            mids = (self.start.coord_array + self.end.coord_array) / 2
+            self.waist_point = Point(
+                coords=CoordsLogical(x=mids[0, 0], y=mids[1, 0], z=mids[2, 0])
+            )
 
 
 class Cuboid(Vector):
