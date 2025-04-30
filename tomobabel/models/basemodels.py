@@ -1,7 +1,7 @@
 import numpy as np
 from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
-from pydantic import Field, model_validator, field_validator
+from pydantic import Field, model_validator
 from enum import Enum
 
 metamodel_version = "None"
@@ -94,8 +94,7 @@ class CoordUnit(str, Enum):
     """
 
     angstrom = "Ångstrom"
-    pixel = "pixel"
-    voxel = "voxel"
+    pixel = "pixel/voxel"
 
 
 class CoordinateLogical(ConfiguredBaseModel):
@@ -106,14 +105,8 @@ class CoordinateLogical(ConfiguredBaseModel):
 
 class CoordinatePhysical(ConfiguredBaseModel):
     axis_origin: str = AxisOrigin.top
-    unit: CoordUnit = Field(default=..., description="Units for the coordinate")
+    unit: str = CoordUnit.pixel
     value: int = Field(default=..., description="The coordinate value")
-
-    @field_validator("unit")
-    def check_units(cls, value):
-        if value not in [CoordUnit.pixel, CoordUnit.voxel]:
-            raise ValueError(f"Unit must be {CoordUnit.pixel} or {CoordUnit.voxel}")
-        return value
 
 
 class CoordsPhysical(ConfiguredBaseModel):
@@ -127,7 +120,7 @@ class CoordsPhysical(ConfiguredBaseModel):
 
     @model_validator(mode="after")
     def units_match(self):
-        vals = self.x, self.y
+        vals = [self.x, self.y]
         if self.z:
             vals.append(self.z)
         if not (v.unit == vals[0].unit for v in vals):
@@ -137,9 +130,10 @@ class CoordsPhysical(ConfiguredBaseModel):
     @property
     def coord_array(self) -> np.ndarray:
         if not self.z:
-            return np.ndarray([self.x, self.y])
+            # pad 2D coords if necessary
+            return np.array([[self.x.value], [self.y.value], [1.0]])
         else:
-            return np.ndarray([self.x, self.y, self.z])
+            return np.array([[self.x.value], [self.y.value], [self.z.value]])
 
 
 class CoordsLogical(ConfiguredBaseModel):
@@ -155,9 +149,10 @@ class CoordsLogical(ConfiguredBaseModel):
     @property
     def coord_array(self) -> np.ndarray:
         if not self.z:
-            return np.ndarray([self.x, self.y])
+            # pad 2D coords if necessary
+            return np.array([[self.x], [self.y], 1])
         else:
-            return np.ndarray([self.x, self.y, self.z])
+            return np.array([[self.x], [self.y], [self.z]])
 
 
 # Model rebuilds

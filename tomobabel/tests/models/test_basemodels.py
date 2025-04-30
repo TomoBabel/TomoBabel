@@ -1,0 +1,61 @@
+import os
+import shutil
+import tempfile
+import unittest
+from pathlib import Path
+
+import numpy as np
+
+from tomobabel.models.basemodels import (
+    CoordsPhysical,
+    CoordinatePhysical,
+)
+from tomobabel.tests.converters.relion import test_data
+
+
+class BaseModelsTest(unittest.TestCase):
+    def setUp(self):
+        """
+        Setup test data and output directories.
+        """
+        self.test_data = Path(os.path.dirname(test_data.__file__))
+        self.test_dir = tempfile.mkdtemp(prefix="tomobabl_test")
+
+        # Change to test directory
+        self._orig_dir = os.getcwd()
+        os.chdir(self.test_dir)
+
+    def tearDown(self):
+        os.chdir(self._orig_dir)
+        if os.path.exists(self.test_dir):
+            shutil.rmtree(self.test_dir)
+
+    def test_get_coords_array_physical3D(self):
+        coords = CoordsPhysical(
+            x=CoordinatePhysical(value=10),
+            y=CoordinatePhysical(value=11),
+            z=CoordinatePhysical(value=12),
+        )
+        assert (coords.coord_array == np.array([[10], [11], [12]])).all()
+
+    def test_get_coords_array_physical2D(self):
+        coords = CoordsPhysical(
+            x=CoordinatePhysical(value=10),
+            y=CoordinatePhysical(value=11),
+        )
+        assert (coords.coord_array == np.array([[10], [11], [1]])).all()
+
+    def test_get_coords_array_logical3D(self):
+        coords = CoordsPhysical(
+            x=CoordinatePhysical(value=10.0),
+            y=CoordinatePhysical(value=11.0),
+            z=CoordinatePhysical(value=12.0),
+        )
+        assert (coords.coord_array == np.array([[10.0], [11.0], [12.0]])).all()
+
+    def test_get_coords_array_logical2D(self):
+        coords = CoordsPhysical(
+            x=CoordinatePhysical(value=10.0),
+            y=CoordinatePhysical(value=11.0),
+        )
+        assert (coords.coord_array == np.array([[10.0], [11.0], [1.0]])).all()
