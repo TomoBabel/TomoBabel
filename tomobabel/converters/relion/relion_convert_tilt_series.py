@@ -7,10 +7,6 @@ from typing import Optional, List, Dict, Tuple
 
 from gemmi import cif
 
-from tomobabel.models.top_level import TiltSeries
-
-from tomobabel.models.transformations import AffineTransform
-
 from tomobabel.models.tilt_series import (
     MovieStackCollection,
     MovieStack,
@@ -22,6 +18,8 @@ from tomobabel.models.tilt_series import (
     TiltSeriesMicrographStack,
     MovieStackSeries,
 )
+from tomobabel.models.top_level import TiltSeries
+from tomobabel.models.transformations import AffineTransform
 from tomobabel.utils import get_mrc_dims, generate_affine_matrix
 
 """Convert a RELION starfile describing a set of tomographic tilt series into CZII

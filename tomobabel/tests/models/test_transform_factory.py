@@ -1,11 +1,3 @@
-#
-#    Copyright (C) 2023 CCP-EM
-#
-#    This Source Code Form is subject to the terms of the Mozilla
-#    Public License, v. 2.0. If a copy of the MPL was not
-#    distributed with this file, You can obtain one at
-#    https://mozilla.org/MPL/2.0/
-#
 import os
 import shutil
 import tempfile
@@ -14,13 +6,13 @@ from pathlib import Path
 
 import numpy as np
 
-from tomobabel.tests.converters.relion import test_data
 from tomobabel.models.transform_factory import (
     flip_transform,
     scale_transform,
     rotation_transform_from_eulers,
     translation,
 )
+from tomobabel.tests.converters.relion import test_data
 
 
 class TransformFactoryTest(unittest.TestCase):

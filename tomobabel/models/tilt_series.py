@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from typing import List, Optional
 
+from pydantic import Field
+
 from tomobabel.models.basemodels import ConfiguredBaseModel, Image2D
 from tomobabel.models.transformations import Transformation
-from pydantic import Field
 
 
 class GainFile(Image2D):

@@ -1,11 +1,3 @@
-#
-#    Copyright (C) 2023 CCP-EM
-#
-#    This Source Code Form is subject to the terms of the Mozilla
-#    Public License, v. 2.0. If a copy of the MPL was not
-#    distributed with this file, You can obtain one at
-#    https://mozilla.org/MPL/2.0/
-#
 import json
 import os
 import shutil
@@ -30,7 +22,6 @@ from tomobabel.models.tilt_series import (
     DefectFile,
 )
 from tomobabel.models.transformations import AffineTransform
-
 from tomobabel.tests.converters.relion import test_data
 from tomobabel.tests.converters.relion.relion_testing_utils import setup_tomo_dirs
 

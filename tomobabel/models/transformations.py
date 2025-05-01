@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-import numpy as np
-from tomobabel.models.basemodels import ConfiguredBaseModel
-from pydantic import Field
 from enum import Enum
+
+import numpy as np
+from pydantic import Field
+
+from tomobabel.models.basemodels import ConfiguredBaseModel
 
 
 class TransformationType(str, Enum):

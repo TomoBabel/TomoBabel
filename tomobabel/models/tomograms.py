@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from typing import Optional
 
-from tomobabel.models.basemodels import Image3D, ConfiguredBaseModel, CoordsLogical
-from tomobabel.models.transformations import AffineTransform
-from tomobabel.models.tilt_series import CTFMetadata
 from pydantic import Field
+
+from tomobabel.models.basemodels import Image3D, ConfiguredBaseModel, CoordsLogical
+from tomobabel.models.tilt_series import CTFMetadata
+from tomobabel.models.transformations import AffineTransform
 
 
 class Tomogram(Image3D):

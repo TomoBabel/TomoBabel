@@ -3,9 +3,10 @@ from __future__ import annotations
 from typing import List, Optional, Union
 
 from pydantic import Field
-from tomobabel.models.tomograms import Map, Tomogram
-from tomobabel.models.tilt_series import TiltSeriesMicrographStack, MovieStackCollection
+
 from tomobabel.models.basemodels import ConfiguredBaseModel, Image2D, Image3D
+from tomobabel.models.tilt_series import TiltSeriesMicrographStack, MovieStackCollection
+from tomobabel.models.tomograms import Map, Tomogram
 
 
 class DataSet(ConfiguredBaseModel):

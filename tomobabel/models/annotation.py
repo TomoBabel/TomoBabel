@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-import numpy as np
 from enum import Enum
-from pydantic import Field, field_validator, model_validator
 from typing import Optional, List, Union
+
+import numpy as np
+from pydantic import Field, field_validator, model_validator
 
 from tomobabel.models.basemodels import ConfiguredBaseModel, CoordsLogical, Annotation
 from tomobabel.models.transformations import AffineTransform

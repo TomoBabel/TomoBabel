@@ -1,8 +1,9 @@
+from enum import Enum
+from typing import Optional, List
+
 import numpy as np
 from pydantic import BaseModel, ConfigDict
-from typing import Optional, List
 from pydantic import Field
-from enum import Enum
 
 metamodel_version = "None"
 version = "0.0.1"
