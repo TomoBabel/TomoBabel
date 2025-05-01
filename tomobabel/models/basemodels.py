@@ -116,8 +116,22 @@ class CoordsLogical(ConfiguredBaseModel):
     z: Optional[float] = Field(default=None, description="z coord")
 
     @property
+    def dim(self) -> int:
+        return 3 if self.z is not None else 2
+
+    @property
     def coord_array(self) -> np.ndarray:
-        return np.array([[self.x], [self.y], [self.z]])
+        if self.dim == 3:
+            return np.array([[self.x], [self.y], [self.z]])
+        else:
+            return np.array([[self.x], [self.y]])
+
+    @property
+    def hom_array(self) -> np.ndarray:
+        if self.dim == 3:
+            return np.array([[self.x], [self.y], [self.z], [1]])
+        else:
+            return np.array([[self.x], [self.y], [1]])
 
 
 # Model rebuilds

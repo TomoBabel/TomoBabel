@@ -6,12 +6,11 @@ from pathlib import Path
 
 import numpy as np
 
-from tomobabel.models.basemodels import CoordsLogical
 from tomobabel.models.annotation import Point, Vector, Sphere, Ovoid
 from tomobabel.tests.converters.relion import test_data
 
-test_point1 = Point(coords=CoordsLogical(x=10.0, y=20.0, z=30))
-test_point2 = Point(coords=CoordsLogical(x=110.0, y=120.0, z=130))
+test_point1 = Point(x=10.0, y=20.0, z=30)
+test_point2 = Point(x=110.0, y=120.0, z=130)
 test_vector1 = Vector(start=test_point1, end=test_point2)
 
 
@@ -33,19 +32,19 @@ class AnnotationModelsTest(unittest.TestCase):
             shutil.rmtree(self.test_dir)
 
     def test_get_point_array_2D(self):
-        point = Point(coords=CoordsLogical(x=10.0, y=20.0))
-        assert (point.coord_array == np.array([[10.0], [20.0], [1.0]])).all()
+        point = Point(x=10.0, y=20.0)
+        assert (point.coord_array == np.array([[10.0], [20.0]])).all()
+        assert (point.hom_array == np.array([[10.0], [20.0], [1.0]])).all()
 
     def test_get_point_array_3D(self):
-        point = Point(coords=test_point1)
-        assert (point.coord_array == np.array([[10.0], [20.0], [30.0]])).all()
+        assert (test_point1.coord_array == np.array([[10.0], [20.0], [30.0]])).all()
+        assert (
+            test_point1.hom_array == np.array([[10.0], [20.0], [30.0], [1.0]])
+        ).all()
 
     def test_get_vector_points(self):
-        p1 = Point(coords=test_point1)
-        p2 = Point(coords=test_point2)
-        v = Vector(start=p1, end=p2)
         assert (
-            v.points
+            test_vector1.points
             == np.array([[[10.0], [20.0], [30.0]], [[110.0], [120.0], [130.0]]])
         ).all()
 
@@ -59,31 +58,25 @@ class AnnotationModelsTest(unittest.TestCase):
         )
 
     def test_get_sphere_center_point(self):
-        sp = Sphere(coords=test_point1, diameter=10)
+        sp = Sphere(center=test_point1, radius=10)
         assert (sp.coord_array == np.array([[10.0], [20.0], [30.0]])).all()
 
     def test_ovoid_with_default_waist_point(self):
-        ovoid = Ovoid(start=test_point1, end=test_point2, waist_size=10)
+        ovoid = Ovoid(vector=test_vector1, waist_size=10)
         assert np.isclose(
             ovoid.waist_point.coord_array, np.array([[60], [70], [80]])
         ).all()
 
     def test_ovoid_with_defined_waist_point(self):
         ovoid = Ovoid(
-            start=test_point1,
-            end=test_point2,
+            vector=test_vector1,
             waist_size=10,
-            waist_point=Point(coords=CoordsLogical(x=60, y=70, z=80)),
+            waist_point=Point(x=60.0, y=70.0, z=80.0),
         )
         assert np.isclose(
-            ovoid.waist_point.coord_array, np.array([[60], [70], [80]])
+            ovoid.waist_point.coord_array, np.array([[60.0], [70.0], [80.0]])
         ).all()
 
     def test_ovoid_with_defined_waist_point_error_not_no_vector(self):
         with self.assertRaises(ValueError):
-            Ovoid(
-                start=test_point1,
-                end=test_point2,
-                waist_size=10,
-                waist_point=Point(coords=CoordsLogical(x=1, y=2, z=3)),
-            )
+            Ovoid(vector=test_vector1, waist_size=10, waist_point=Point(x=1, y=2, z=3))

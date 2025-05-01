@@ -2,13 +2,19 @@ from __future__ import annotations
 
 import numpy as np
 from enum import Enum
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 from typing import Optional, List, Union
 
 from tomobabel.models.basemodels import ConfiguredBaseModel, CoordsLogical, Annotation
 from tomobabel.models.transformations import AffineTransform
 
+
 # TODO: give all these helper properties like center, corners vector and etc,
+
+
+def check_input_dims(inputs: List[object]):
+    if not all([isinstance(x, type(inputs[0])) for x in inputs]):
+        raise ValueError("Input dimensions do not match")
 
 
 class AnnotationType(str, Enum):
@@ -27,22 +33,8 @@ class AnnotationType(str, Enum):
     text = "text"
 
 
-class Point(Annotation):
+class Point(CoordsLogical):
     type: str = AnnotationType.point
-    coords: CoordsLogical = Field(
-        default=..., description="Coords for the point center"
-    )
-
-    @property
-    def coord_array(self) -> np.ndarray:
-        """Returns the coordinates as a numpy array
-
-        Returns:
-            np.ndarray: The coordinate array in a 3x1 array [[x], [y], [z]] if the
-            coords are 2D the array is padded with the [2,1] index as 1
-
-        """
-        return self.coords.coord_array
 
 
 class Vector(Annotation):
@@ -52,10 +44,15 @@ class Vector(Annotation):
     start: Point
     end: Point
 
+    @model_validator(mode="after")
+    def input_dims_match(self) -> Vector:
+        check_input_dims([self.start, self.end])
+        return self
+
     @property
     def points(self) -> np.ndarray:
         """
-        Get the start and end points of the vector as a 3x2 array
+        Get the start and end points of the vector as arrays
 
         Returns:
             np.ndarry: the start and end point arrays
@@ -87,18 +84,28 @@ class Vector(Annotation):
         return self.vector / norm
 
 
-class Sphere(Point):
-    """A sphere of diameter 'diameter' centered on x,y,(z) coordinate"""
+class Sphere(Annotation):
+    """A sphere or circle of radius 'radius' centered on a coordinate"""
 
     type: str = AnnotationType.sphere
-    diameter: float = Field(default=..., description="The sphere diameter")
+    center: Point = Field(
+        default=..., description="The center point of the circle/sphere"
+    )
+    radius: float = Field(default=..., description="The sphere diameter")
+
+    @property
+    def coord_array(self):
+        return self.center.coord_array
 
 
-class Ovoid(Vector):
+class Ovoid(Annotation):
     """An 2D oval or 3D  ovoid with its widest point at 'waist_point' on the main
     vector"""
 
     type: str = AnnotationType.ovoid
+    vector: Vector = Field(
+        default=..., description="Vector that describes the center line of the ovoid"
+    )
     waist_size: float = Field(
         default=..., description="The length across the ovoid at its widest point"
     )
@@ -109,16 +116,24 @@ class Ovoid(Vector):
         ),
     )
 
+    @model_validator(mode="after")
+    def check_waist_point_dim(self) -> Ovoid:
+        if self.waist_point is not None:
+            check_input_dims([self.waist_point, self.vector.start])
+        return self
+
     def model_post_init(self, __context) -> None:
         # calculate the waist point if not given
-        if not self.waist_point:
-            mids = (self.start.coord_array + self.end.coord_array) / 2
+        if self.waist_point is None:
+            mids = (self.vector.start.coord_array + self.vector.end.coord_array) / 2
             self.waist_point = Point(
-                coords=CoordsLogical(x=mids[0, 0], y=mids[1, 0], z=mids[2, 0])
+                x=mids[0, 0],
+                y=mids[1, 0],
+                z=None if self.vector.start.dim == 2 else mids[2, 0],
             )
         # verify waist point is on the central vector
-        v = self.end.coord_array - self.start.coord_array
-        w = self.waist_point.coord_array - self.start.coord_array
+        v = self.vector.end.coord_array - self.vector.start.coord_array
+        w = self.waist_point.coord_array - self.vector.start.coord_array
 
         v_flat = v.flatten()
         w_flat = w.flatten()
@@ -135,10 +150,27 @@ class Cuboid(Vector):
     """A cuboidal box defined by two or three vectors"""
 
     type: str = AnnotationType.cuboid
-    center: Point
-    v1: Vector
-    v2: Vector
-    v3: Optional[Vector]
+    center: Point = Field(default=..., description="The center of the box")
+    v1: Vector = Field(
+        default=...,
+        description="A vector that points to a face of the box from the center point",
+    )
+    v2: Optional[Vector] = Field(
+        default=None,
+        description=(
+            "A vector that points to the 2nd face of the box, if None it will be set "
+            "as 90° from v1 to make a square/cube"
+        ),
+    )
+    v3: Optional[Vector] = Field(
+        default=None,
+        description=(
+            "A vector that points to the 3nd face of the box, if None it will be set as"
+            "90° from v2 to make a square/cube"
+        ),
+    )
+
+    # TODO: write function that calculates V2 and V3 automatically for a cube
 
 
 class Spline(Annotation):
