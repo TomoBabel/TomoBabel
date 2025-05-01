@@ -184,13 +184,19 @@ class Spline(Annotation):
         return value
 
 
-class Cylinder(Vector):
+class Cylinder(Annotation):
     type: str = AnnotationType.cylinder
+    vector: Vector = Field(
+        default=..., description="Vector for the center line of the cylinder"
+    )
     diameter: float = Field(default=..., description="The diameter of the cylinder")
 
 
-class Cone(Vector):
+class Cone(Annotation):
     type: str = AnnotationType.cone
+    vector: Vector = Field(
+        default=..., description="Vector for the center line of the cylinder"
+    )
     start_diameter: float = Field(
         default=..., description="Diameter of the base of the cone"
     )
@@ -216,15 +222,16 @@ class Shell(Annotation):
     )
 
 
-class FitMap(Point):
+class FitMap(Annotation):
     """Annotation for a fitted map"""
 
     type: str = AnnotationType.map
+    center: Point = Field(default=..., description="Coords of the center of the map")
     file: str = Field(default=..., description="Path to the map file")
     transformation: AffineTransform = Field(
         default=AffineTransform(),
         description=(
-            "Tranformation that fits the map. IE: Affine transform for rotation"
+            "Tranformation applied to fit the map. IE: Affine transform for rotation"
         ),
     )
 
@@ -236,6 +243,9 @@ class AnnotationSet(ConfiguredBaseModel):
     )
     annotations: List[Annotation] = Field(default=..., description="The annotations")
 
+
+# TODO: Add Surface and Volume Annotation types.  Investigate the best way to do this
+#  probably use the trimesh library and .stl files.
 
 # Model rebuilds
 # see https://pydantic-docs.helpmanual.io/usage/models/#rebuilding-a-model
