@@ -53,7 +53,9 @@ class Cone(Annotation):
 
 
 class Cuboid(Annotation):
-    """A cuboidal box defined by two or three vectors"""
+    """
+    A cuboidal box defined by two or three vectors
+    """
 
     type: str = AnnotationType.cuboid
     center: Point = Field(default=..., description="The center of the box")

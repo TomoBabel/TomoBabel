@@ -4,6 +4,13 @@ from tomobabel.models.annotation import Point
 
 
 def point(coords: np.ndarray) -> Point:
+    """
+    Generate a Point Annotation object from a 3x1 array
+
+    Args:
+        coords (np.ndarray): The coordinate vector
+    :return:
+    """
     if len(coords) == 2:
         point = Point(x=coords[0, 0], y=coords[1, 0])
     elif len(coords) == 3:

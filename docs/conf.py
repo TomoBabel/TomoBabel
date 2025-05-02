@@ -38,6 +38,7 @@ extensions = [
 
 autodoc_typehints = "description"
 
+
 # sphinx-autodoc-pydantic configuration
 autodoc_pydantic_model_show_signature = False
 autodoc_pydantic_model_show_json = False

@@ -24,7 +24,9 @@ class Annotation(BaseModel):
     )
 
     type: str = "text"
-    text: str = Field(default="", description="Free text for annotation description")
+    description: str = Field(
+        default="", description="Free text for annotation description"
+    )
 
 
 class ConfiguredBaseModel(BaseModel):
