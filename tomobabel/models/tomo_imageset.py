@@ -5,7 +5,7 @@ from typing import List, Optional
 from pydantic import Field
 
 from tomobabel.models.basemodels import ConfiguredBaseModel, Image2D
-from tomobabel.models.transformations import Transformation
+from tomobabel.models.transformations import Transformation, TranslationTransform
 
 
 class GainFile(Image2D):
@@ -145,6 +145,20 @@ class MovieStackCollection(ConfiguredBaseModel):
     )
 
 
+class TiltSeriesMicrographAlignment(ConfiguredBaseModel):
+    """
+    Describes the transformations to align a micrograph in a tilt series
+    """
+
+    translation: TranslationTransform = Field(
+        default=TranslationTransform(),
+        description="Matrix that describes the translations for alignment",
+    )
+    x_tilt: float = Field(default=0.0, description="Tilt in x in degrees")
+    y_tilt: float = Field(default=0.0, description="Tilt in y in degrees")
+    z_rot: float = Field(default=0.0, description="Rotation around z in degrees")
+
+
 class TiltSeriesMicrograph(Image2D):
     """
     A merged micrograph generated from a movie stack
@@ -162,8 +176,8 @@ class TiltSeriesMicrograph(Image2D):
     refined_tilt_angle: Optional[float] = Field(
         default=None, description="The tilt angle after refinement in degrees"
     )
-    alignment_transformations: List[Transformation] = Field(
-        default_factory=list,
+    alignment_transformations: TiltSeriesMicrographAlignment = Field(
+        default=TiltSeriesMicrographAlignment(),
         description="Transformations applied for tilt series alignment",
     )
     path: str = Field(
@@ -187,6 +201,17 @@ class TiltSeriesMicrographStack(ConfiguredBaseModel):
     path: str = Field(default="")
 
 
+class TiltSeriesSet(ConfiguredBaseModel):
+    """
+    A container for the aligned tilt series associated with a region
+    """
+
+    tilt_series: List[TiltSeriesMicrographStack] = Field(
+        default=...,
+        description="The TiltSeriesMicrographStacks associated with this Region",
+    )
+
+
 # Model rebuilds
 # see https://pydantic-docs.helpmanual.io/usage/models/#rebuilding-a-model
 
@@ -199,3 +224,4 @@ MovieStackCollection.model_rebuild()
 MovieStackSeries.model_rebuild()
 TiltSeriesMicrograph.model_rebuild()
 TiltSeriesMicrographStack.model_rebuild()
+TiltSeriesSet.model_rebuild()

@@ -3,18 +3,93 @@ from typing import Tuple, Optional
 
 import mrcfile
 import numpy as np
+from scipy.spatial.transform import Rotation
 
 
-def generate_affine_matrix(
-    xshift: float,
-    yshift: float,
-    xtilt: float,
-    ytilt: float,
-    rot: float,
-    euler_conv: str,
-) -> np.ndarray:
-    """Placeholder for function that will generate an affine matrix"""
-    return np.zeros((3, 3))
+# TODO: Make sure this is correct
+def tilt_series_micrograph_alignment_matrix(
+    x_shift, y_shift, x_tilt, y_tilt, z_rotation
+):
+    """
+    Create a 3x3 affine transformation matrix to align an image in a tilt series
+
+    Arguments:
+        x_shift (float): x translation in px,
+        y_shift (float): y translation in px,
+        x_tilt (float): x tilt in degrees
+        y_tilt (float): y tilt in degrees
+        z_rotation: rotation around z in degrees
+
+    Returns:
+    numpy.ndarray: 3x3 affine matrix for alignment
+    """
+
+    # Step 1: Rotation around Z axis (in 2D plane)
+    rot = Rotation.from_euler("z", z_rotation, degrees=True)
+    rot_matrix = rot.as_matrix()[:2, :2]  # extract 2D part
+
+    # Step 2: Shear (tilt)
+    shear_matrix = np.array([[1, x_tilt], [y_tilt, 1]])
+
+    # Step 3: Combine rotation and shear
+    linear_transform = rot_matrix @ shear_matrix
+
+    # Step 4: Construct full 3x3 affine matrix
+    affine_matrix = np.eye(3)
+    affine_matrix[:2, :2] = linear_transform
+    affine_matrix[:2, 2] = [x_shift, y_shift]
+
+    return affine_matrix
+
+
+def decompose_tilt_series_micrograph_alignment_matrix(matrix, pixel_size_ang=1.0):
+    """
+    Decomposes a 3x3 affine matrix into:
+    x_shift_ang, y_shift_ang (translation in Angstroms),
+    x_tilt, y_tilt (shear), and z_rotation_deg (rotation in degrees).
+
+    Args:
+    - matrix: A 3x3 affine matrix (numpy array).
+    - pixel_size_ang: Pixel size in Angstroms per pixel.
+
+    Returns:
+    - dict: Contains x_shift_ang, y_shift_ang, x_tilt, y_tilt, z_rotation_deg.
+    """
+
+    # Ensure it's a 3x3 matrix
+    matrix = np.array(matrix, dtype=np.float64)
+    if matrix.shape == (2, 3):
+        matrix = np.vstack([matrix, [0, 0, 1]])
+
+    # Step 1: Extract translation (from last column)
+    t = matrix[:2, 2]  # Last column for x and y shift (translation)
+    x_shift_ang = t[0] * pixel_size_ang
+    y_shift_ang = t[1] * pixel_size_ang
+
+    # Step 2: Extract the 2x2 linear transformation part (rotation + shear)
+    A = matrix[:2, :2]
+
+    # Step 3: Calculate rotation angle
+    # We assume the rotation matrix has form:
+    # [ cos(theta)  -sin(theta) ]
+    # [ sin(theta)   cos(theta) ]
+    # The rotation angle is computed using arctangent of the elements.
+    rotation_angle_rad = np.arctan2(A[1, 0], A[0, 0])  # Rotation angle
+    rotation_angle_deg = np.rad2deg(rotation_angle_rad)
+
+    # Step 4: Shear extraction: The off-diagonal elements represent shear.
+    # The shear values are normalized by the rotation component.
+    # We use a simple method to extract shear.
+    x_tilt = A[0, 1] / np.cos(rotation_angle_rad)  # Horizontal shear
+    y_tilt = A[1, 0] / np.sin(rotation_angle_rad)  # Vertical shear
+
+    return {
+        "x_shift_ang": np.float64(x_shift_ang),
+        "y_shift_ang": np.float64(y_shift_ang),
+        "x_tilt": np.float64(x_tilt),
+        "y_tilt": np.float64(y_tilt),
+        "z_rotation_deg": np.float64(rotation_angle_deg),
+    }
 
 
 def get_mrc_dims(

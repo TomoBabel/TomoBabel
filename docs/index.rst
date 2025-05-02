@@ -33,6 +33,19 @@ To install:
  cd TomoBabel
  pip install .
 
+The CETS Data Model
+---------------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   source/datamodel_explained
+
+.. toctree::
+   :maxdepth: 1
+
+   source/data_objs
+
 Converters - current
 --------------------
 
@@ -63,20 +76,6 @@ Converters - planned
    :maxdepth: 1
 
    source/converters/cmd_warpm
-
-The CETS Data Model
----------------------------
-
-.. toctree::
-   :maxdepth: 1
-
-   source/datamodel_explained
-
-.. toctree::
-   :maxdepth: 1
-
-   source/data_objs
-
 
 For developers
 --------------

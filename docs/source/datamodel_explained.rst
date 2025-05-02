@@ -18,7 +18,7 @@ Each ``Region`` contains a ``TomoImageSet`` with data about tomographic imaging
 of that part of the sample and a ``NonTomoImageSet`` that contains any other imaging of
 the region (EG: CLEM images or overview micrographs)
 
-Inside `TomoImageSet`
+Inside ``TomoImageSet``
 ---------------------
 
 **Raw Data**
@@ -32,8 +32,8 @@ for each frame in the movie.
 
 **Aligned tilt series**
 
-Aligned tilt series are stored in ``TiltSeriesMicrographStack`` objects that contain a
-``TiltSeriesMicrograph`` for each image (Merged movie for that tilt)
+Aligned tilt series are stored in ``TiltSeriesSet`` containing ``TiltSeriesMicrographStack``
+objects that contain a ``TiltSeriesMicrograph`` for each image (Merged movie for that tilt)
 
 **Reconstructed Tomograms**
 
@@ -46,7 +46,7 @@ contain ``SubTomogram`` and ``Map`` objects associated with that tomogram.
 **Annotations**
 
 Every data object in the heierarchy has an ``annotations`` attribute that contains any
-number of `Annotation` objects.  Which can contain anything from text or coordinates, to
+number of ``Annotation`` objects.  Which can contain anything from text or coordinates, to
 a 3D mesh surface.
 
 So...
@@ -72,15 +72,16 @@ Tree
     |  |- MovieStackSeries
     |     |- MovieStack
     |        |- Movieframe
-    |           |- CTFMetadata
+    |        |- CTFMetadata
     |
-    |- TiltSeriesMicrographStack
-    |  |- TiltSeriesMicrograph
-    |     |- CTFMetadata
+    |  |- TiltSeriesSet
+    |     |- TiltSeriesMicrographStack
+    |        |- TiltSeriesMicrograph
+    |           |- CTFMetadata
     |
     |- TomogramSet
     |  |- Tomogram
-    |  |- MapSet
-    |  |  |- Map
-    |  |- SubTomgramSet
-    |  |  |- SubTomogram
+    |     |- MapSet
+    |        |- Map
+    |     |- SubTomgramSet
+    |        |- SubTomogram

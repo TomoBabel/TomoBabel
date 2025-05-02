@@ -2,6 +2,7 @@ import argparse
 import json
 import logging
 import sys
+import numpy as np
 from pathlib import Path
 from typing import Optional, List, Dict, Tuple
 
@@ -19,8 +20,13 @@ from tomobabel.models.tomo_imageset import (
     MovieStackSeries,
 )
 from tomobabel.models.top_level import TomoImageSet
-from tomobabel.models.transformations import AffineTransform
-from tomobabel.utils import get_mrc_dims, generate_affine_matrix
+from tomobabel.models.tomo_imageset import TiltSeriesMicrographAlignment
+from tomobabel.models.transformations import (
+    TranslationTransform,
+    MotionCorrectionTransformation,
+)
+from tomobabel.models.annotation import Annotation
+from tomobabel.utils import get_mrc_dims
 
 """Convert a RELION starfile describing a set of tomographic tilt series into CETS
 metadata format.
@@ -151,6 +157,7 @@ class PipelinerTiltSeriesGroupConverter(object):
         input_file: Path,
         gain_file: Optional[str] = None,
         defect_file: Optional[str] = None,
+        motion_correction_job: Optional[str] = None,
     ) -> None:
         self.input_file = input_file
         self.all_movie_collections: Dict[str, MovieStackCollection] = {}
@@ -158,6 +165,19 @@ class PipelinerTiltSeriesGroupConverter(object):
         self.ts_files: Dict[str, str] = {}
         self.gain_file = gain_file
         self.defect_file = defect_file
+        self.motion_correction_job = motion_correction_job
+
+    def get_motioncorr_transformation(self, stack_name: str, frame: int):
+        """
+        Placeholder function that gets the motion corr transformation for a frame
+        Need to figure out how to extract this info from the eps files in
+        self.motioncorrection_job...
+        """
+        # TODO: Replace this placeholder with actual function
+        return MotionCorrectionTransformation(
+            trans_matrix=np.identity(2),
+            annotations=[Annotation(description="<PLACEHOLDER>")],
+        )
 
     def get_movies_data(
         self, tilt_series_block: cif.Block
@@ -309,9 +329,9 @@ class PipelinerTiltSeriesGroupConverter(object):
             return None, None
 
     @staticmethod
-    def get_transformation_data(
+    def get_alignment_transformation_data(
         data_block: cif.Block, index: int, apix: float
-    ) -> Optional[AffineTransform]:
+    ) -> TiltSeriesMicrographAlignment:
         """Get transformation data for a single frame in a tilt series movie
 
         Args:
@@ -324,9 +344,7 @@ class PipelinerTiltSeriesGroupConverter(object):
                 it couldn't be calculated.
 
         """
-        # ToDo: Make sure this is correct - are units correct (Rad rotation & shear
-        #  angle), Å translations.
-        transformation_obj = None
+        transformation_obj = TiltSeriesMicrographAlignment()
         trans_data = data_block.find(
             "_rln",
             [
@@ -339,14 +357,13 @@ class PipelinerTiltSeriesGroupConverter(object):
         )
         if trans_data:
             xshift, yshift, xtilt, ytilt, rot = [float(x) for x in trans_data[index]]
-            xshift = xshift / apix
-            yshift = yshift / apix
-
-            affine_matrix = generate_affine_matrix(
-                xshift, yshift, xtilt, ytilt, rot, "ZYZ"
-            )
-            transformation_obj = AffineTransform(
-                type="affine", affine=affine_matrix.tolist()
+            xshift = xshift / apix  # TODO: make sure that this should be in pixels
+            yshift = yshift / apix  # TODO: make sure that this should be in pixels
+            transformation_obj.y_tilt = ytilt
+            transformation_obj.x_tilt = xtilt
+            transformation_obj.z_rot = rot
+            transformation_obj.translation = TranslationTransform(
+                trans_matrix=np.array([[xshift, 0], [0, yshift]])
             )
 
         return transformation_obj
@@ -363,19 +380,22 @@ class PipelinerTiltSeriesGroupConverter(object):
             mov (RelionTiltSeriesMovie): The movie object to update
         """
         ctf_obj = self.get_ctf_data(tilt_series_block, n)
-        trans = self.get_transformation_data(tilt_series_block, n, mov.apix)
         mov.czii_movie_frames = []
         for n in range(mov.n_frames):
+            mocorrxform = self.get_motioncorr_transformation(
+                stack_name=mov.stack_file_path,
+                frame=n,
+            )
             mov.czii_movie_frames.append(
                 MovieFrame(
                     path=mov.stack_file_path,
-                    section=str(n),
+                    section=n,
                     nominal_tilt_angle=mov.tilt,
                     accumulated_dose=mov.dose_per_frame * float(n + 1) + mov.pre_exp,
                     height=mov.height,
                     width=mov.width,
                     ctf_metadata=ctf_obj,
-                    motion_correction_transformations=[] if trans is None else [trans],
+                    motion_correction_transformations=[mocorrxform],
                 )
             )
 

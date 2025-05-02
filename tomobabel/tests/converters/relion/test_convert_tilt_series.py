@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path, PosixPath
 from unittest.mock import patch
-
+from numpy import array
 import numpy as np
 from gemmi import cif
 
@@ -20,13 +20,14 @@ from tomobabel.models.tomo_imageset import (
     MovieFrame,
     GainFile,
     DefectFile,
+    TiltSeriesMicrographAlignment,
 )
-from tomobabel.models.transformations import AffineTransform
+from tomobabel.models.transformations import MotionCorrectionTransformation
+from tomobabel.models.basemodels import Annotation
 from tomobabel.tests.converters.relion import test_data
 from tomobabel.tests.converters.relion.relion_testing_utils import setup_tomo_dirs
 
 
-@unittest.skip("these tests need to be updated for the new model")
 class CziiTiltSeriesConverterTest(unittest.TestCase):
     def setUp(self):
         """
@@ -63,7 +64,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
             "height": 2000,
             "width": 2000,
             "n_frames": 8,
-            "czii_movie_stack": MovieStack(images=None, path="my_stackfile.mrc"),
+            "czii_movie_stack": MovieStack(images=[], path="my_stackfile.mrc"),
             "pre_exp": 3.0,
             "apix": 0.675,
         }
@@ -79,6 +80,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
             "ts_files": {},
             "defect_file": None,
             "gain_file": None,
+            "motion_correction_job": None,
         }
 
     def test_converter_get_tilt_series_dict(self):
@@ -118,9 +120,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
             "width": 2000,
             "n_frames": 8,
             "apix": 0.675,
-            "czii_movie_stack": MovieStack(
-                images=None, path="frames/TS_01_000_0.0.mrc"
-            ),
+            "czii_movie_stack": MovieStack(images=[], path="frames/TS_01_000_0.0.mrc"),
         }
 
     def test_converter_get_ctf_data(self):
@@ -136,28 +136,28 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
             "defocus_u": 38855.828125,
             "defocus_v": 38750.828125,
             "defocus_angle": 35.154533,
+            "defocus_handedness": -1,
+            "annotations": [],
         }
 
-    @patch(
-        "tomobabel.converters.relion.relion_convert_tilt_series.generate_affine_matrix"
-    )
-    def test_converter_get_transformation_data(self, mock_matrix):
-        mock_matrix.return_value = np.zeros((3, 3), dtype=float)
+    def test_converter_get_transformation_data(self):
         setup_tomo_dirs()
         ts = cif.read_file("AlignTiltSeries/job005/tilt_series/TS_01.star")
         block = ts.find_block("TS_01")
         converter = PipelinerTiltSeriesGroupConverter(
             input_file=Path("CtfFind/job003/corrected_tilt_series.star")
         )
-        transdata = converter.get_transformation_data(block, 0, 0.675)
-        assert isinstance(transdata, AffineTransform)
-        assert transdata.model_dump() == {
-            "name": None,
-            "input": None,
-            "output": None,
-            "type": "affine",
-            "affine": [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]],
-        }
+        transdata = converter.get_alignment_transformation_data(
+            data_block=block, index=0, apix=0.675
+        )
+        assert isinstance(transdata, TiltSeriesMicrographAlignment)
+        assert np.allclose(
+            transdata.translation.trans_matrix,
+            array([[51.62312741, 0.0], [0.0, 160.73987704]]),
+        )
+        assert transdata.x_tilt == 0.0
+        assert transdata.y_tilt == -57.0
+        assert transdata.z_rot == 85.032958
 
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_converter_get_gain_and_defect_files(self, mockdims):
@@ -188,118 +188,252 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
             apix=0.675,
         )
         converter.make_movie_collections(block, 0, mov)
-        assert mov.czii_movie_frames == [
+        expected = [
             MovieFrame(
+                annotations=[],
                 width=None,
                 height=None,
-                coordinate_systems=None,
-                coordinate_transformations=None,
+                pixel_size=None,
+                path="my_stack.mrc",
+                section=0,
                 nominal_tilt_angle=3.5,
                 accumulated_dose=2.5,
                 ctf_metadata=None,
-                path="my_stack.mrc",
-                section="0",
+                motion_correction_transformations=[
+                    MotionCorrectionTransformation(
+                        annotations=[
+                            Annotation(
+                                type="text",
+                                description="<PLACEHOLDER>",
+                            )
+                        ],
+                        transform_type="translation",
+                        trans_matrix=array([[1.0, 0.0], [0.0, 1.0]]),
+                    )
+                ],
             ),
             MovieFrame(
+                annotations=[],
                 width=None,
                 height=None,
-                coordinate_systems=None,
-                coordinate_transformations=None,
+                pixel_size=None,
+                path="my_stack.mrc",
+                section=1,
                 nominal_tilt_angle=3.5,
                 accumulated_dose=3.5,
                 ctf_metadata=None,
-                path="my_stack.mrc",
-                section="1",
+                motion_correction_transformations=[
+                    MotionCorrectionTransformation(
+                        annotations=[
+                            Annotation(
+                                type="text",
+                                description="<PLACEHOLDER>",
+                            )
+                        ],
+                        transform_type="translation",
+                        trans_matrix=array([[1.0, 0.0], [0.0, 1.0]]),
+                    )
+                ],
             ),
             MovieFrame(
+                annotations=[],
                 width=None,
                 height=None,
-                coordinate_systems=None,
-                coordinate_transformations=None,
+                pixel_size=None,
+                path="my_stack.mrc",
+                section=2,
                 nominal_tilt_angle=3.5,
                 accumulated_dose=4.5,
                 ctf_metadata=None,
-                path="my_stack.mrc",
-                section="2",
+                motion_correction_transformations=[
+                    MotionCorrectionTransformation(
+                        annotations=[
+                            Annotation(
+                                type="text",
+                                description="<PLACEHOLDER>",
+                            )
+                        ],
+                        transform_type="translation",
+                        trans_matrix=array([[1.0, 0.0], [0.0, 1.0]]),
+                    )
+                ],
             ),
             MovieFrame(
+                annotations=[],
                 width=None,
                 height=None,
-                coordinate_systems=None,
-                coordinate_transformations=None,
+                pixel_size=None,
+                path="my_stack.mrc",
+                section=3,
                 nominal_tilt_angle=3.5,
                 accumulated_dose=5.5,
                 ctf_metadata=None,
-                path="my_stack.mrc",
-                section="3",
+                motion_correction_transformations=[
+                    MotionCorrectionTransformation(
+                        annotations=[
+                            Annotation(
+                                type="text",
+                                description="<PLACEHOLDER>",
+                            )
+                        ],
+                        transform_type="translation",
+                        trans_matrix=array([[1.0, 0.0], [0.0, 1.0]]),
+                    )
+                ],
             ),
             MovieFrame(
+                annotations=[],
                 width=None,
                 height=None,
-                coordinate_systems=None,
-                coordinate_transformations=None,
+                pixel_size=None,
+                path="my_stack.mrc",
+                section=4,
                 nominal_tilt_angle=3.5,
                 accumulated_dose=6.5,
                 ctf_metadata=None,
-                path="my_stack.mrc",
-                section="4",
+                motion_correction_transformations=[
+                    MotionCorrectionTransformation(
+                        annotations=[
+                            Annotation(
+                                type="text",
+                                description="<PLACEHOLDER>",
+                            )
+                        ],
+                        transform_type="translation",
+                        trans_matrix=array([[1.0, 0.0], [0.0, 1.0]]),
+                    )
+                ],
             ),
             MovieFrame(
+                annotations=[],
                 width=None,
                 height=None,
-                coordinate_systems=None,
-                coordinate_transformations=None,
+                pixel_size=None,
+                path="my_stack.mrc",
+                section=5,
                 nominal_tilt_angle=3.5,
                 accumulated_dose=7.5,
                 ctf_metadata=None,
-                path="my_stack.mrc",
-                section="5",
+                motion_correction_transformations=[
+                    MotionCorrectionTransformation(
+                        annotations=[
+                            Annotation(
+                                type="text",
+                                description="<PLACEHOLDER>",
+                            )
+                        ],
+                        transform_type="translation",
+                        trans_matrix=array([[1.0, 0.0], [0.0, 1.0]]),
+                    )
+                ],
             ),
             MovieFrame(
+                annotations=[],
                 width=None,
                 height=None,
-                coordinate_systems=None,
-                coordinate_transformations=None,
+                pixel_size=None,
+                path="my_stack.mrc",
+                section=6,
                 nominal_tilt_angle=3.5,
                 accumulated_dose=8.5,
                 ctf_metadata=None,
-                path="my_stack.mrc",
-                section="6",
+                motion_correction_transformations=[
+                    MotionCorrectionTransformation(
+                        annotations=[
+                            Annotation(
+                                type="text",
+                                description="<PLACEHOLDER>",
+                            )
+                        ],
+                        transform_type="translation",
+                        trans_matrix=array([[1.0, 0.0], [0.0, 1.0]]),
+                    )
+                ],
             ),
             MovieFrame(
+                annotations=[],
                 width=None,
                 height=None,
-                coordinate_systems=None,
-                coordinate_transformations=None,
+                pixel_size=None,
+                path="my_stack.mrc",
+                section=7,
                 nominal_tilt_angle=3.5,
                 accumulated_dose=9.5,
                 ctf_metadata=None,
-                path="my_stack.mrc",
-                section="7",
+                motion_correction_transformations=[
+                    MotionCorrectionTransformation(
+                        annotations=[
+                            Annotation(
+                                type="text",
+                                description="<PLACEHOLDER>",
+                            )
+                        ],
+                        transform_type="translation",
+                        trans_matrix=array([[1.0, 0.0], [0.0, 1.0]]),
+                    )
+                ],
             ),
             MovieFrame(
+                annotations=[],
                 width=None,
                 height=None,
-                coordinate_systems=None,
-                coordinate_transformations=None,
+                pixel_size=None,
+                path="my_stack.mrc",
+                section=8,
                 nominal_tilt_angle=3.5,
                 accumulated_dose=10.5,
                 ctf_metadata=None,
-                path="my_stack.mrc",
-                section="8",
+                motion_correction_transformations=[
+                    MotionCorrectionTransformation(
+                        annotations=[
+                            Annotation(
+                                type="text",
+                                description="<PLACEHOLDER>",
+                            )
+                        ],
+                        transform_type="translation",
+                        trans_matrix=array([[1.0, 0.0], [0.0, 1.0]]),
+                    )
+                ],
             ),
             MovieFrame(
+                annotations=[],
                 width=None,
                 height=None,
-                coordinate_systems=None,
-                coordinate_transformations=None,
+                pixel_size=None,
+                path="my_stack.mrc",
+                section=9,
                 nominal_tilt_angle=3.5,
                 accumulated_dose=11.5,
                 ctf_metadata=None,
-                path="my_stack.mrc",
-                section="9",
+                motion_correction_transformations=[
+                    MotionCorrectionTransformation(
+                        annotations=[
+                            Annotation(
+                                type="text",
+                                description="<PLACEHOLDER>",
+                            )
+                        ],
+                        transform_type="translation",
+                        trans_matrix=array([[1.0, 0.0], [0.0, 1.0]]),
+                    )
+                ],
             ),
         ]
+        for n, x in enumerate(mov.czii_movie_frames):
+            assert x.annotations == expected[n].annotations
+            assert x.width == expected[n].width
+            assert x.height == expected[n].height
+            assert x.pixel_size == expected[n].pixel_size
+            assert x.path == expected[n].path
+            assert x.section == expected[n].section
+            assert x.nominal_tilt_angle == expected[n].nominal_tilt_angle
+            assert x.accumulated_dose == expected[n].accumulated_dose
+            assert x.ctf_metadata == expected[n].ctf_metadata
+            assert np.allclose(
+                x.motion_correction_transformations[0].trans_matrix,
+                expected[n].motion_correction_transformations[0].trans_matrix,
+            )
 
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_converter_do_conversion_import_job(self, mockmrc):
@@ -401,7 +535,6 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
             ats_actual = json.load(ats)
         assert ats_dict == ats_actual
 
-    @unittest.skip("Need to fix Affine missing fields in model_dump()")
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_converter_do_conversion_align_job(self, mockmrc):
         mockmrc.return_value = 2000, 2000
@@ -415,6 +548,8 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
         amc_dict = {}
         for i in converter.all_movie_collections:
             amc_dict[i] = converter.all_movie_collections[i].model_dump()
+        with open(self.test_data / "import_all_movie_cols.json", "w") as amc:
+            json.dump(amc_dict, amc, indent=4)
         with open(self.test_data / "import_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
         assert amc_dict == amc_actual
