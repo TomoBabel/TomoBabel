@@ -5,7 +5,10 @@ from typing import List, Optional, Union
 from pydantic import Field
 
 from tomobabel.models.basemodels import ConfiguredBaseModel, Image2D, Image3D
-from tomobabel.models.tilt_series import TiltSeriesMicrographStack, MovieStackCollection
+from tomobabel.models.tomo_imageset import (
+    TiltSeriesMicrographStack,
+    MovieStackCollection,
+)
 from tomobabel.models.tomograms import Map, Tomogram
 
 
@@ -30,7 +33,7 @@ class Region(ConfiguredBaseModel):
     """
 
     name: str = Field(default="", description="Name for this region")
-    tilt_series: List[TiltSeries] = Field(
+    tilt_series: List[TomoImageSet] = Field(
         default_factory=list, description="Tilt series associated with the region"
     )
     non_tomo_imaging: List[NonTomoImageSet] = Field(
@@ -39,7 +42,7 @@ class Region(ConfiguredBaseModel):
     )
 
 
-class TiltSeries(ConfiguredBaseModel):
+class TomoImageSet(ConfiguredBaseModel):
     tomograms: List[Tomogram] = Field(
         default_factory=list,
         description="Reconstructed tomograms associated with this tilt series",
@@ -67,4 +70,4 @@ class NonTomoImageSet(ConfiguredBaseModel):
 DataSet.model_rebuild()
 NonTomoImageSet.model_rebuild()
 Region.model_rebuild()
-TiltSeries.model_rebuild()
+TomoImageSet.model_rebuild()

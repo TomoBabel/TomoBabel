@@ -4,10 +4,10 @@ RELION
 *The module currently only handles tilt series, in the future it will be expanded for*
 *other data types (Tomograms, Averages, and Annotations)*
 
-Using the converter to prepare a ``Dataset``
-********************************************
+Using the converter to prepare a ``Dataset`` from an entire project
+*******************************************************************
 
-``relion_converter`` creates a SDF ``Dataset`` object for an entire RELION
+``relion_converter`` creates a CETS ``Dataset`` object for an entire RELION
 project.
 
 Run it with the following arguments:
@@ -51,7 +51,7 @@ As a script:
 
  python3 relion_converter --tilt_series_starfile AlignTiltSeries/job005/aligned_tilt_series.star --output dataset.json --gain_reference my_gain_file.mrc --defect_file my_defect_file.mrc
 
-This writes ``dataset.json`` containing the CZII ``Dataset`` object for the project
+This writes ``dataset.json`` containing the CETS ``Dataset`` object for the project
 
 As a module:
 
@@ -72,10 +72,11 @@ As a module:
 
 This returns the ``Dataset`` object
 
-Using individual type converters
-********************************
-``relion_converter`` calls individual type converters for each of the
-main data types, these can also be used in isolation.
+Creating CETS data objects from indivudal parts of a project 
+************************************************************
+There are individual type converters for each of the main data types, these can
+be used in isolation to convert specific parts of a project to their corresponding 
+CETS data objects.
 
 .. list-table:: Type converters
    :header-rows: 1
@@ -125,9 +126,9 @@ This will write the following files:
 - ``output_dir/TS_54_movie_collection.json``
 - ``output_dir/TS_54_tilt_series.json``
 
-The ``_movie_collection`` files contain a CZII ``MovieStackCollection`` object for the named tilt series
+The ``_movie_collection`` files contain a CETS ``MovieStackCollection`` object for the named tilt series
 
-The ``_tilt_series`` files contain a CZII ``TiltSeries`` object forthe named tilt series
+The ``_tilt_series`` files contain a CETS ``TiltSeries`` object forthe named tilt series
 
 As a module:
 

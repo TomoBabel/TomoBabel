@@ -14,7 +14,7 @@ from tomobabel.converters.relion.relion_convert_tilt_series import (
     PipelinerTiltSeriesGroupConverter,
     main as tilt_series_main,
 )
-from tomobabel.models.tilt_series import (
+from tomobabel.models.tomo_imageset import (
     MovieStack,
     CTFMetadata,
     MovieFrame,

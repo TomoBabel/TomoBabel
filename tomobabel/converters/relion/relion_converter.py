@@ -7,7 +7,7 @@ from typing import Optional, List
 from tomobabel.converters.relion.relion_convert_tilt_series import (
     PipelinerTiltSeriesGroupConverter,
 )
-from tomobabel.models.top_level import DataSet, Region, TiltSeries
+from tomobabel.models.top_level import DataSet, Region, TomoImageSet
 
 
 def get_tilt_series_data(
@@ -54,7 +54,7 @@ def get_arguments() -> argparse.ArgumentParser:
         argparse.ArgumentParser: Contains the args
 
     """
-    parser = argparse.ArgumentParser(description="RELION tilt series -> CZII converter")
+    parser = argparse.ArgumentParser(description="RELION tilt series -> CETS converter")
 
     parser.add_argument(
         "--tilt_series_starfile",
@@ -102,7 +102,7 @@ def main(in_args=None) -> DataSet:
     Each tilt series/tomogram is given a Region.
 
     Returns:
-        Dataset: CZII Dataset object
+        Dataset: CETS Dataset object
     """
     if in_args is None:
         in_args = sys.argv[1:]
@@ -121,7 +121,7 @@ def main(in_args=None) -> DataSet:
         movie_stack_collections = converted_tilt_series.all_movie_collections[
             tilt_series
         ]
-        tiltseries_container = TiltSeries(raw_movies=movie_stack_collections)
+        tiltseries_container = TomoImageSet(raw_movies=movie_stack_collections)
         region = Region(tilt_series=[tiltseries_container])
         regions.append(region)
     dataset = DataSet(regions=regions)

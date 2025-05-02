@@ -98,12 +98,22 @@ class CoordsPhysical(ConfiguredBaseModel):
     z: Optional[int] = Field(default=None, description="z coord")
 
     @property
+    def dim(self) -> int:
+        return 3 if self.z is not None else 2
+
+    @property
     def coord_array(self) -> np.ndarray:
-        if not self.z:
-            # pad 2D coords if necessary
-            return np.array([[self.x], [self.y], [1.0]])
-        else:
+        if self.dim == 3:
             return np.array([[self.x], [self.y], [self.z]])
+        else:
+            return np.array([[self.x], [self.y]])
+
+    @property
+    def hom_array(self) -> np.ndarray:
+        if self.dim == 3:
+            return np.array([[self.x], [self.y], [self.z], [1]])
+        else:
+            return np.array([[self.x], [self.y], [1]])
 
 
 class CoordsLogical(ConfiguredBaseModel):

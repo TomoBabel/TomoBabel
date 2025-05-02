@@ -5,7 +5,7 @@ from typing import Optional
 from pydantic import Field
 
 from tomobabel.models.basemodels import Image3D, ConfiguredBaseModel, CoordsLogical
-from tomobabel.models.tilt_series import CTFMetadata
+from tomobabel.models.tomo_imageset import CTFMetadata
 from tomobabel.models.transformations import AffineTransform
 
 

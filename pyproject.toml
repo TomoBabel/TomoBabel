@@ -51,10 +51,10 @@ optional-dependencies.dev = [
 ]
 
 optional-dependencies.docs = [
-    "myst-parser",
     "sphinx",
     "sphinx-argparse",
-    "sphinx-rtd-theme"
+    "sphinx-rtd-theme",
+    "autodoc_pydantic",
 ]
 
 [project.urls]

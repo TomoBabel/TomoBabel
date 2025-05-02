@@ -32,9 +32,19 @@ extensions = [
     "sphinx.ext.doctest",
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
+    "sphinx_autodoc_typehints",
     "sphinxarg.ext",
-    "myst_parser",
 ]
+
+autodoc_typehints = "description"
+
+# sphinx-autodoc-pydantic configuration
+autodoc_pydantic_model_show_signature = False
+autodoc_pydantic_model_show_json = False
+autodoc_pydantic_model_show_field_summary = True
+autodoc_pydantic_model_show_field_constraints = True
+autodoc_pydantic_model_show_config_summary = True
+autodoc_pydantic_model_show_config_member = False
 
 # intersphinx mapping
 intersphinx_mapping = {

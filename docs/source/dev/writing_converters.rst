@@ -6,8 +6,14 @@ When adding a new converter for a sepcific program it should be put in a directo
 
 Converters must conform to the following guidelines:
 
-#. It should create SDF data objects and use ``model_dump()`` on them to return a dict in the SDF format.
+#. It should create CETS data objects.
 
 #. It should be able to be run with arguments from the command line and imported and used as a python module.
+
+#. It should have the ability to convert an entire project to CETS format
+
+#. It should have the ability to separately convert individual parts of a project to the CETS data format
+
+#. Write doncumentations for the converter.  Make a folder in `docs/source/converters` with full documentation and update `docs/source/index.rst` to display it.
 
 

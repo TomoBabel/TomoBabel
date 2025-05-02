@@ -7,7 +7,7 @@ from typing import Optional, List, Dict, Tuple
 
 from gemmi import cif
 
-from tomobabel.models.tilt_series import (
+from tomobabel.models.tomo_imageset import (
     MovieStackCollection,
     MovieStack,
     MovieFrame,
@@ -18,11 +18,11 @@ from tomobabel.models.tilt_series import (
     TiltSeriesMicrographStack,
     MovieStackSeries,
 )
-from tomobabel.models.top_level import TiltSeries
+from tomobabel.models.top_level import TomoImageSet
 from tomobabel.models.transformations import AffineTransform
 from tomobabel.utils import get_mrc_dims, generate_affine_matrix
 
-"""Convert a RELION starfile describing a set of tomographic tilt series into CZII
+"""Convert a RELION starfile describing a set of tomographic tilt series into CETS
 metadata format.
 
 The master tilt series starfile should have the following header format:
@@ -88,7 +88,7 @@ class RelionTiltSeriesMovie(object):
     Attributes:
         dose_per_frame (float): In e-/Å^2
         stack_file_path (Path): Path to the MRC stack with the frames
-        czii_movie_frames (List[MovieFrame]): A list of the created CZII MovieFrame objs
+        czii_movie_frames (List[MovieFrame]): A list of the created CETS MovieFrame objs
             for each frame of the movie. Initially empty.
         tilt (float): Nominal tilt angle, in degrees.
         pre_exp (float): In e-/Å^2
@@ -96,7 +96,7 @@ class RelionTiltSeriesMovie(object):
         width (int): Image x dimension in px
         n_frames (int): Number of frames in the movie IE: Stack z dimension
         apix (float): Movie pixel size in Å/px
-        czii_movie_stack (MovieStack): A CZII MovieStack object that will hold the
+        czii_movie_stack (MovieStack): A CETS MovieStack object that will hold the
             MovieFrames
     """
 
@@ -127,16 +127,16 @@ class RelionTiltSeriesMovie(object):
 
 
 class PipelinerTiltSeriesGroupConverter(object):
-    """An object for conversion of a pipeliner TiltSeriesGroupMetadata node into CZII
+    """An object for conversion of a pipeliner TiltSeriesGroupMetadata node into CETS
     format.
 
     Attributes:
         input_file (Path): The RELION tilt series starfile. TiltSeriesGroupMetadata node
             type
-        all_movie_collections (Dict[str, MovieStackCollection]): The CZII
+        all_movie_collections (Dict[str, MovieStackCollection]): The CETS
             MovieStackCollection for each tiltseries in the input file
             {tilt_series_name: MovieStackCollection}
-        all_tilt_series (Dict[str, TiltSeries]): The CZII TiltSeries for each tiltseries
+        all_tilt_series (Dict[str, TiltSeries]): The CETS TiltSeries for each tiltseries
             in the input file.
         ts_files (Dict[str, str]): The TiltSeriesMetadata node for each tilt series in
             the input file. {tilt_series_name: file path}
@@ -154,7 +154,7 @@ class PipelinerTiltSeriesGroupConverter(object):
     ) -> None:
         self.input_file = input_file
         self.all_movie_collections: Dict[str, MovieStackCollection] = {}
-        self.all_tilt_series: Dict[str, TiltSeries] = {}
+        self.all_tilt_series: Dict[str, TomoImageSet] = {}
         self.ts_files: Dict[str, str] = {}
         self.gain_file = gain_file
         self.defect_file = defect_file
@@ -234,7 +234,7 @@ class PipelinerTiltSeriesGroupConverter(object):
             index (int): Which tilt image to get the CTF data for
 
         Returns:
-            Optional[CTFMetadata]: A CZII CTFMetadata for the tilt image
+            Optional[CTFMetadata]: A CETS CTFMetadata for the tilt image
         """
         ctf_obj: Optional[CTFMetadata] = None
 
@@ -266,7 +266,7 @@ class PipelinerTiltSeriesGroupConverter(object):
         structure is not in the RELION format this will not be possible.
 
         Returns:
-            Tuple[Optional[GainFile], Optional[DefectFile]]: CZII GainFile and
+            Tuple[Optional[GainFile], Optional[DefectFile]]: CETS GainFile and
                 DefectFile objects for the tilt series
 
         """
@@ -320,7 +320,7 @@ class PipelinerTiltSeriesGroupConverter(object):
             apix (float): The movie pixel size
 
         Returns:
-            Optional[Affine]: A CZII Affine object with the transformation or None if
+            Optional[Affine]: A CETS Affine object with the transformation or None if
                 it couldn't be calculated.
 
         """
@@ -352,7 +352,7 @@ class PipelinerTiltSeriesGroupConverter(object):
         return transformation_obj
 
     def make_movie_collections(self, tilt_series_block, n, mov) -> None:
-        """Make a CZII MovieStackCollection Object for each tilt series and update its
+        """Make a CETS MovieStackCollection Object for each tilt series and update its
         RelionTiltSeriesMovie object
 
         CTF and transformation are the same for every frame in the movie
@@ -383,14 +383,14 @@ class PipelinerTiltSeriesGroupConverter(object):
         mov.czii_movie_stack.images = mov.czii_movie_frames
 
     def make_tilt_series_object(self, path, stacks) -> TiltSeriesMicrographStack:
-        """Make a CZII TiltSeries object for a tilt series
+        """Make a CETS TiltSeriesMicrographStack object for a tilt series
 
         Args:
             path (str): The path to the MRC file for the tilt series stack
-            stacks (MovieStackSeries): The CZII MovieStackSeries objects that contain
+            stacks (MovieStackSeries): The CETS MovieStackSeries objects that contain
                 the movie frames for the tilt images in the tilt series
         Returns:
-            TiltSeries: A CZII tilt serie object for the tilt series
+            TiltSeriesMicrographStack: A CETS tilt serie object for the tilt series
         """
         ts_obj = TiltSeriesMicrographStack(path=path, micrographs=[])
         for mss in stacks.movie_stacks:
@@ -420,7 +420,7 @@ class PipelinerTiltSeriesGroupConverter(object):
         self.ts_files = {key: val for key, val in ts_files}
 
     def do_conversion(self, tilt_series_names: Optional[List[str]] = None) -> None:
-        """Get the data in tilt series in CZII data model format
+        """Get the data in tilt series in CETS data model format
 
         Args:
             tilt_series_names (Optional[List[str]]): Which tilt series to get the data
@@ -489,7 +489,7 @@ def get_arguments() -> argparse.ArgumentParser:
         argparse.ArgumentParser: Contains the args
 
     """
-    parser = argparse.ArgumentParser(description="RELION tilt series -> CZII converter")
+    parser = argparse.ArgumentParser(description="RELION tilt series -> CETS converter")
 
     parser.add_argument(
         "--input_starfile",

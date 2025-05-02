@@ -3,16 +3,19 @@
   :alt: TomoBabel logo
   :align: center
 
-===============
-TomoBabel
-===============
+==================================================================
+Cryo Electron Tomography Standard (CETS) data format and TomoBabel
+==================================================================
 
-TomoBabel  is designed to facilitate transfer and reuse of cryo-electron tomography
-(cryoET) data through a standardized data format (SDF).  The library and command line programs
-convert data from cryoET data processing software to the SDF and from the SDF to various
-software formats, allowing interoperability between different packages.
+The cryo electron tomography standard (CETS) data format is designed to facilitate
+transfer and reuse of cryo-electron tomography (cryoET) data through a standardized data
+format
 
-The SDF will be adopted by both the `CZII CryoET DataPortal <https://cryoetdataportal.czscience.com/>`_
+TomoBabel is a library and set of command line programs that convert data from cryoET
+data processing software to the CETS and from the CETS to various software formats,
+allowing interoperability between different packages.
+
+The CETS will be adopted by both the `CZII CryoET DataPortal <https://cryoetdataportal.czscience.com/>`_
 and `Electron Microscopy Public Image Archive (EMPIAR) <https://www.ebi.ac.uk/empiar/>`_.
 
 To install:
