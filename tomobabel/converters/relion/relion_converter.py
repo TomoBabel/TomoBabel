@@ -8,6 +8,7 @@ from tomobabel.converters.relion.relion_convert_tilt_series import (
     PipelinerTiltSeriesGroupConverter,
 )
 from tomobabel.models.top_level import DataSet, Region, TomoImageSet
+from tomobabel.utils import NumpyEncoder
 
 
 def get_tilt_series_data(
@@ -136,7 +137,7 @@ def main(in_args=None) -> DataSet:
         out.parent.mkdir(exist_ok=True)
         data = dataset.model_dump()
         with open(out, "w") as outfile:
-            json.dump(data, outfile, indent=4)
+            json.dump(data, outfile, indent=4, cls=NumpyEncoder)
 
     return dataset
 

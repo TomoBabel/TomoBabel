@@ -26,7 +26,7 @@ from tomobabel.models.transformations import (
     MotionCorrectionTransformation,
 )
 from tomobabel.models.annotation import Annotation
-from tomobabel.utils import get_mrc_dims
+from tomobabel.utils import get_mrc_dims, NumpyEncoder
 
 """Convert a RELION starfile describing a set of tomographic tilt series into CETS
 metadata format.
@@ -582,7 +582,7 @@ def main(in_args=None) -> PipelinerTiltSeriesGroupConverter:
                 outfile = Path(str(out) + f"_{tilt_series}_tilt_series.json")
             ts_dict = converter.all_tilt_series[tilt_series].model_dump()
             with open(outfile, "w") as to_write:
-                json.dump(ts_dict, to_write)
+                json.dump(ts_dict, to_write, indent=4, cls=NumpyEncoder)
 
         for movie_collection in converter.all_movie_collections:
             if out.is_dir():
@@ -591,6 +591,6 @@ def main(in_args=None) -> PipelinerTiltSeriesGroupConverter:
                 outfile = Path(str(out) + f"_{movie_collection}_movie_collection.json")
             mc_dict = converter.all_movie_collections[movie_collection].model_dump()
             with open(outfile, "w") as to_write:
-                json.dump(mc_dict, to_write, indent=4)
+                json.dump(mc_dict, to_write, indent=4, cls=NumpyEncoder)
 
     return converter
