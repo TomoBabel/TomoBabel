@@ -16,4 +16,5 @@ Converters must conform to the following guidelines:
 
 #. Write doncumentations for the converter.  Make a folder in `docs/source/converters` with full documentation and update `docs/source/index.rst` to display it.
 
+#. Write tests for your converter.  Make a dir in ``tomobabel/tests/converters`` and put them there.
 

@@ -8,7 +8,7 @@ from typing import Optional, List, Dict, Tuple
 
 from gemmi import cif
 
-from tomobabel.models.tomo_imageset import (
+from tomobabel.models.tomo_images import (
     MovieStackCollection,
     MovieStack,
     MovieFrame,
@@ -17,10 +17,10 @@ from tomobabel.models.tomo_imageset import (
     DefectFile,
     TiltSeriesMicrograph,
     TiltSeriesMicrographStack,
-    MovieStackSeries,
+    MovieStackSet,
 )
 from tomobabel.models.top_level import TomoImageSet
-from tomobabel.models.tomo_imageset import TiltSeriesMicrographAlignment
+from tomobabel.models.tomo_images import TiltSeriesMicrographAlignment
 from tomobabel.models.transformations import (
     TranslationTransform,
     MotionCorrectionTransformation,
@@ -129,7 +129,7 @@ class RelionTiltSeriesMovie(object):
         self.width = dims[0]
         self.n_frames = n_frames
         self.apix = apix
-        self.czii_movie_stack = MovieStack(images=[], path=str(stack_file_path))
+        self.czii_movie_stack = MovieStack(frame_images=[], path=str(stack_file_path))
 
 
 class PipelinerTiltSeriesGroupConverter(object):
@@ -176,7 +176,11 @@ class PipelinerTiltSeriesGroupConverter(object):
         # TODO: Replace this placeholder with actual function
         return MotionCorrectionTransformation(
             trans_matrix=np.identity(2),
-            annotations=[Annotation(description="<PLACEHOLDER>")],
+            annotations=[
+                Annotation(
+                    description="<PLACEHOLDER FOR TRANSFORMATION DONE BY MOTIONCORR>"
+                )
+            ],
         )
 
     def get_movies_data(
@@ -368,7 +372,9 @@ class PipelinerTiltSeriesGroupConverter(object):
 
         return transformation_obj
 
-    def make_movie_collections(self, tilt_series_block, n, mov) -> None:
+    def make_movie_collections(
+        self, tilt_series_block: cif.Block, section: int, mov: RelionTiltSeriesMovie
+    ) -> None:
         """Make a CETS MovieStackCollection Object for each tilt series and update its
         RelionTiltSeriesMovie object
 
@@ -379,7 +385,7 @@ class PipelinerTiltSeriesGroupConverter(object):
                 TiltSeriesMetadata node for a single tilt series
             mov (RelionTiltSeriesMovie): The movie object to update
         """
-        ctf_obj = self.get_ctf_data(tilt_series_block, n)
+        ctf_obj = self.get_ctf_data(tilt_series_block, section)
         mov.czii_movie_frames = []
         for n in range(mov.n_frames):
             mocorrxform = self.get_motioncorr_transformation(
@@ -400,21 +406,21 @@ class PipelinerTiltSeriesGroupConverter(object):
             )
 
         # update the MovieStack
-        mov.czii_movie_stack.images = mov.czii_movie_frames
+        mov.czii_movie_stack.frame_images = mov.czii_movie_frames
 
     def make_tilt_series_object(self, path, stacks) -> TiltSeriesMicrographStack:
         """Make a CETS TiltSeriesMicrographStack object for a tilt series
 
         Args:
             path (str): The path to the MRC file for the tilt series stack
-            stacks (MovieStackSeries): The CETS MovieStackSeries objects that contain
+            stacks (MovieStackSet): The CETS MovieStackSet objects that contain
                 the movie frames for the tilt images in the tilt series
         Returns:
             TiltSeriesMicrographStack: A CETS tilt serie object for the tilt series
         """
         ts_obj = TiltSeriesMicrographStack(path=path, micrographs=[])
         for mss in stacks.movie_stacks:
-            img = mss.images[-1]
+            img = mss.frame_images[-1]
             proj_img = TiltSeriesMicrograph(
                 path=img.path,
                 nominal_tilt_angle=img.nominal_tilt_angle,
@@ -478,13 +484,18 @@ class PipelinerTiltSeriesGroupConverter(object):
             for n, mov in enumerate(movies):
                 self.make_movie_collections(tilt_series_block, n, mov)
 
-            # make the MovieStackSeries objects
-            ms_series = MovieStackSeries(
-                movie_stacks=[x.czii_movie_stack for x in movies]
+            # make the MovieStackSet objects
+            ms_series = MovieStackSet(
+                movie_stacks=[x.czii_movie_stack for x in movies],
+                annotations=[
+                    Annotation(
+                        description=f"Raw images for tilt series name: {ts_name}"
+                    )
+                ],
             )
             gainfile, defectfile = self.get_gain_ref_and_defect_file()
             collection = MovieStackCollection(
-                movie_stacks=[ms_series],
+                movie_stack_sets=[ms_series],
                 gain_file=gainfile,
                 defect_file=defectfile,
             )

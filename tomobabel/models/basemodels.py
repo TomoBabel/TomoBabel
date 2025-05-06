@@ -21,6 +21,7 @@ class Annotation(BaseModel):
         arbitrary_types_allowed=True,
         use_enum_values=True,
         strict=False,
+        json_encoders={np.ndarray: lambda a: a.tolist()},
     )
 
     type: str = "text"
@@ -41,6 +42,7 @@ class ConfiguredBaseModel(BaseModel):
         arbitrary_types_allowed=True,
         use_enum_values=True,
         strict=False,
+        json_encoders={np.ndarray: lambda a: a.tolist()},
     )
     annotations: List[Annotation] = Field(
         default_factory=list, description="Annotations for this Image"

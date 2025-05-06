@@ -1,18 +1,33 @@
 from pathlib import Path
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Dict
 
 import mrcfile
 import numpy as np
-from json import JSONEncoder
+import json
 
 # from scipy.spatial.transform import Rotation
 
 
-class NumpyEncoder(JSONEncoder):
+class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.ndarray):
             return obj.tolist()
         return super().default(obj)
+
+
+def clean_dict(input_dict) -> Dict[str, object]:
+    """Converts any np.ndarrys in the dict to lists
+
+    Args:
+        input_dict (Dict[str, object]): The dict to operate on
+
+    Returns:
+        Dict[str, object]: The dict with all np.ndarrays in list form
+
+    """
+    json_str = json.dumps(input_dict, cls=NumpyEncoder)
+    result_dict = json.loads(json_str)
+    return result_dict
 
 
 # TODO: Make sure this is the correct way to go about this

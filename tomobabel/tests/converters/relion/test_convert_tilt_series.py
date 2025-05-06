@@ -3,6 +3,7 @@ import os
 import shutil
 import tempfile
 import unittest
+from deepdiff import DeepDiff
 from pathlib import Path, PosixPath
 from unittest.mock import patch
 from numpy import array
@@ -14,7 +15,7 @@ from tomobabel.converters.relion.relion_convert_tilt_series import (
     PipelinerTiltSeriesGroupConverter,
     main as tilt_series_main,
 )
-from tomobabel.models.tomo_imageset import (
+from tomobabel.models.tomo_images import (
     MovieStack,
     CTFMetadata,
     MovieFrame,
@@ -26,6 +27,7 @@ from tomobabel.models.transformations import MotionCorrectionTransformation
 from tomobabel.models.basemodels import Annotation
 from tomobabel.tests.converters.relion import test_data
 from tomobabel.tests.converters.relion.relion_testing_utils import setup_tomo_dirs
+from tomobabel.utils import clean_dict
 
 
 class CziiTiltSeriesConverterTest(unittest.TestCase):
@@ -64,7 +66,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
             "height": 2000,
             "width": 2000,
             "n_frames": 8,
-            "czii_movie_stack": MovieStack(images=[], path="my_stackfile.mrc"),
+            "czii_movie_stack": MovieStack(frame_images=[], path="my_stackfile.mrc"),
             "pre_exp": 3.0,
             "apix": 0.675,
         }
@@ -120,7 +122,9 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
             "width": 2000,
             "n_frames": 8,
             "apix": 0.675,
-            "czii_movie_stack": MovieStack(images=[], path="frames/TS_01_000_0.0.mrc"),
+            "czii_movie_stack": MovieStack(
+                frame_images=[], path="frames/TS_01_000_0.0.mrc"
+            ),
         }
 
     def test_converter_get_ctf_data(self):
@@ -450,14 +454,13 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
             amc_dict[i] = converter.all_movie_collections[i].model_dump()
         with open(self.test_data / "import_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
-        assert amc_dict == amc_actual
-
+        assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
         ats_dict = {}
         for i in converter.all_tilt_series:
-            ats_dict[i] = converter.all_tilt_series[i].model_dump()
+            ats_dict[i] = converter.all_tilt_series[i].model_dump_json()
         with open(self.test_data / "import_all_tilt_series.json") as ats:
             ats_actual = json.load(ats)
-        assert ats_dict == ats_actual
+        assert not DeepDiff(clean_dict(ats_dict), ats_actual, ignore_order=True)
 
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_converter_do_conversion_with_CTF_job(self, mockmrc):
@@ -474,14 +477,14 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
             amc_dict[i] = converter.all_movie_collections[i].model_dump()
         with open(self.test_data / "ctf_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
-        assert amc_dict == amc_actual
+        assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
 
         ats_dict = {}
         for i in converter.all_tilt_series:
             ats_dict[i] = converter.all_tilt_series[i].model_dump()
         with open(self.test_data / "ctf_all_tilt_series.json") as ats:
             ats_actual = json.load(ats)
-        assert ats_dict == ats_actual
+        assert not DeepDiff(clean_dict(ats_dict), ats_actual, ignore_order=True)
 
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_converter_do_conversion_with_CTF_job_with_gain_and_defect(self, mockmrc):
@@ -501,14 +504,14 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
             amc_dict[i] = converter.all_movie_collections[i].model_dump()
         with open(self.test_data / "ctf_all_movie_cols_gain_defect.json") as amc:
             amc_actual = json.load(amc)
-        assert amc_dict == amc_actual
+        assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
 
         ats_dict = {}
         for i in converter.all_tilt_series:
             ats_dict[i] = converter.all_tilt_series[i].model_dump()
         with open(self.test_data / "ctf_all_tilt_series.json") as ats:
             ats_actual = json.load(ats)
-        assert ats_dict == ats_actual
+        assert not DeepDiff(clean_dict(ats_dict), ats_actual, ignore_order=True)
 
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_converter_do_conversion_with_MotionCorr_job(self, mockmrc):
@@ -526,14 +529,14 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
             amc_dict[i] = converter.all_movie_collections[i].model_dump()
         with open(self.test_data / "mocorr_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
-        assert amc_dict == amc_actual
+        assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
 
         ats_dict = {}
         for i in converter.all_tilt_series:
             ats_dict[i] = converter.all_tilt_series[i].model_dump()
         with open(self.test_data / "mocorr_all_tilt_series.json") as ats:
             ats_actual = json.load(ats)
-        assert ats_dict == ats_actual
+        assert not DeepDiff(clean_dict(ats_dict), ats_actual, ignore_order=True)
 
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_converter_do_conversion_align_job(self, mockmrc):
@@ -548,18 +551,16 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
         amc_dict = {}
         for i in converter.all_movie_collections:
             amc_dict[i] = converter.all_movie_collections[i].model_dump()
-        with open(self.test_data / "import_all_movie_cols.json", "w") as amc:
-            json.dump(amc_dict, amc, indent=4)
-        with open(self.test_data / "import_all_movie_cols.json") as amc:
+        with open(self.test_data / "aligned_ts_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
-        assert amc_dict == amc_actual
+        assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
 
         ats_dict = {}
         for i in converter.all_tilt_series:
             ats_dict[i] = converter.all_tilt_series[i].model_dump()
-        with open(self.test_data / "import_all_tilt_series.json") as ats:
+        with open(self.test_data / "aligned_ts_all_tilt_series.json") as ats:
             ats_actual = json.load(ats)
-        assert ats_dict == ats_actual
+        assert not DeepDiff(clean_dict(ats_dict), ats_actual, ignore_order=True)
 
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_main_with_outputs_dir(self, mockdims):
@@ -601,13 +602,10 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
         # check one tilt series file
         with open("outdir/TS_01_tilt_series.json") as wrote:
             wrote_data = json.load(wrote)
+
         with open(self.test_data / "TS_01_tilt_series.json") as exp:
             expected = json.load(exp)
         assert wrote_data == expected
-
-    @unittest.skip("Need to fix Affine missing fields in model_dump()")
-    def test_tilt_series_converter_main(self):
-        pass
 
 
 if __name__ == "__main__":

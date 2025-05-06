@@ -20,8 +20,18 @@ and `Electron Microscopy Public Image Archive (EMPIAR) <https://www.ebi.ac.uk/em
 
 To install:
 
-.. code-block::
+.. code-block:: shell
 
  git clone https://github.com/TomoBabel/TomoBabel.git
  cd TomoBabel
  pip install .
+
+To get the docs:
+
+.. code-block:: shell
+
+ pip install -e .[docs]
+ cd docs
+ make html
+
+then open ``TomoBabal/docs/_build/index.html`` in your web browser

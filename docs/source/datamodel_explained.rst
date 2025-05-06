@@ -23,22 +23,23 @@ Inside ``TomoImageSet``
 
 **Raw Data**
 
-The first layer is ``MovieStackCollection`` which contains info that applies to all the
+The first layer is ``MovieStackSet`` which contains info that applies to all the
 subsequent images such as the gain file, defect file, and microscope/imaging info
 
-Inside that are ``MovieStackSeries`` objects each corresponding to a tilt series. These
-contain a ``MovieStack`` for each tilt image. Each ``MovieStack`` contains a ``MovieFrame``
+Inside that are ``MovieStack`` objects each corresponding to a tilt series. Each ``MovieStack`` contains a ``MovieFrame``
 for each frame in the movie.
 
 **Aligned tilt series**
 
-Aligned tilt series are stored in ``TiltSeriesSet`` containing ``TiltSeriesMicrographStack``
-objects that contain a ``TiltSeriesMicrograph`` for each image (Merged movie for that tilt)
+Inside  ``MovieStack`` Aligned tilt series derived from that set of movies are stored in
+``TiltSeriesSet`` containing ``TiltSeriesMicrographStack`` objects that contain a
+``TiltSeriesMicrograph`` for each image (Merged movie for that tilt)
 
 **Reconstructed Tomograms**
 
-Any tomograms created from the data in this ``Region`` are stored in the ``TomogramSet``
-object containing (you guessed it!) ``Tomogram`` objects
+Inside the a``TiltSeriesMicrographStack`` can be a ``TomogramSet`` object containing
+(you guessed it!) ``Tomogram`` objects for tomograms geberated from the aligned tilt
+series
 
 Inside each ``Tomogram`` object are ``SubTomogramSet`` and ``MapSet`` objects that
 contain ``SubTomogram`` and ``Map`` objects associated with that tomogram.
@@ -46,8 +47,8 @@ contain ``SubTomogram`` and ``Map`` objects associated with that tomogram.
 **Annotations**
 
 Every data object in the heierarchy has an ``annotations`` attribute that contains any
-number of ``Annotation`` objects.  Which can contain anything from text or coordinates, to
-a 3D mesh surface.
+number of ``Annotation`` objects.  Which can contain anything from text or coordinates,
+to a 3D mesh surface.
 
 So...
 
@@ -66,22 +67,21 @@ Tree
 
  DataSet
  |- Region
-    |- MovieStackCollection
-    |  |- GainFile
-    |  |- DefectFile
-    |  |- MovieStackSeries
-    |     |- MovieStack
-    |        |- Movieframe
-    |        |- CTFMetadata
-    |
-    |  |- TiltSeriesSet
-    |     |- TiltSeriesMicrographStack
-    |        |- TiltSeriesMicrograph
-    |           |- CTFMetadata
-    |
-    |- TomogramSet
-    |  |- Tomogram
-    |     |- MapSet
-    |        |- Map
-    |     |- SubTomgramSet
-    |        |- SubTomogram
+ |  |- NonTomoImageSet
+ |  |- TomoImageSet
+ |  |  |- MovieStackSet
+ |  |  |  |- GainFile
+ |  |  |  |- DefectFile
+ |  |  |  |- MovieStack
+ |  |  |  |  |- Movieframe
+ |  |  |  |  |- CTFMetadata
+ |  |  |  |  |- TiltSeriesSet
+ |  |  |  |  |  |- TiltSeriesMicrographStack
+ |  |  |  |  |  |  |- TiltSeriesMicrograph
+ |  |  |  |  |  |  |- CTFMetadata
+ |  |  |  |  |  |- TomogramSet
+ |  |  |  |  |  |  |- Tomogram
+ |  |  |  |  |  |  |  |- SubTomgramSet
+ |  |  |  |  |  |  |  |  |- SubTomogram
+ |  |  |  |  |  |  |  |- MapSet
+ |  |  |  |  |  |  |  |  |- Map

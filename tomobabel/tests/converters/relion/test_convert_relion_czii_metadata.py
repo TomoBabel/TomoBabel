@@ -45,7 +45,7 @@ class CziiConverterTest(unittest.TestCase):
         )
         with open(self.test_data / "ctf_dataset.json") as exp:
             expected = json.load(exp)
-        assert dataset.model_dump() == expected
+        assert dataset.model_dump_json() == expected
 
 
 if __name__ == "__main__":

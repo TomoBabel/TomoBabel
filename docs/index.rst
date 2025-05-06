@@ -27,7 +27,7 @@ General info and installation
 
 To install:
 
-.. code-block::
+.. code-block:: shell
 
  git clone https://github.com/TomoBabel/TomoBabel.git
  cd TomoBabel

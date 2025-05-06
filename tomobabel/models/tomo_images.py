@@ -4,8 +4,14 @@ from typing import List, Optional
 
 from pydantic import Field
 
-from tomobabel.models.basemodels import ConfiguredBaseModel, Image2D
+from tomobabel.models.basemodels import (
+    ConfiguredBaseModel,
+    Image2D,
+    Image3D,
+    CoordsLogical,
+)
 from tomobabel.models.transformations import Transformation, TranslationTransform
+from tomobabel.models.transformations import AffineTransform
 
 
 class GainFile(Image2D):
@@ -113,13 +119,13 @@ class MovieStack(ConfiguredBaseModel):
     A stack of movie frames.
     """
 
-    images: List[MovieFrame] = Field(
+    frame_images: List[MovieFrame] = Field(
         default=..., description="The movie frames in the stack"
     )
     path: str = Field(default="")
 
 
-class MovieStackSeries(ConfiguredBaseModel):
+class MovieStackSet(ConfiguredBaseModel):
     """
     A group of movie stacks that belong to a single tilt series.
     """
@@ -134,7 +140,7 @@ class MovieStackCollection(ConfiguredBaseModel):
     A collection of movie stacks using the same gain and defect files.
     """
 
-    movie_stacks: List[MovieStackSeries] = Field(
+    movie_stack_sets: List[MovieStackSet] = Field(
         default_factory=list, description="The movie stacks in the collection"
     )
     gain_file: Optional[GainFile] = Field(
@@ -198,6 +204,10 @@ class TiltSeriesMicrographStack(ConfiguredBaseModel):
         default_factory=list,
         description="The micrographs that make up this tilt series",
     )
+    Tomograms: List[TomogramSet] = Field(
+        default_factory=list,
+        description="Tomograms created from this set of tilt images",
+    )
     path: str = Field(default="")
 
 
@@ -212,16 +222,74 @@ class TiltSeriesSet(ConfiguredBaseModel):
     )
 
 
+class Tomogram(Image3D):
+    """Holds a tomogram"""
+
+    file: Optional[str] = Field(default=None, description="Path to the file")
+
+
+class TomogramSet(ConfiguredBaseModel):
+    """
+    Holds a set of Tomograms
+    """
+
+    tomograms: List[Tomogram] = Field(
+        default_factory=[],
+        description="A set of tomograms created from these tilt series micrographs",
+    )
+
+
+class SubTomogram(Image3D):
+    """
+    Holds a sub tomogram
+    """
+
+    alignment_transformation: Optional[AffineTransform] = Field(
+        default=None, description="The transformation applied to align this subtomo"
+    )
+    ctf_metadata: Optional[CTFMetadata] = Field(
+        default=None, description="CTF metadata for this subtomo"
+    )
+    coordinates: Optional[CoordsLogical] = Field(
+        default=None,
+        description="The location of the center of the subtomo in the parent tomogram",
+    )
+
+
+class SubTomogramSet(ConfiguredBaseModel):
+    """
+    Holds a set of subtomograms
+    """
+
+    Subtomograms: List[SubTomogram] = Field(
+        default_factory=[], description="Sets of subtomograms extracted from a tomogram"
+    )
+
+
+class Map(ConfiguredBaseModel):
+    """
+    Holds a 3D map
+    """
+
+    file: str = Field(default=..., description="Path the map file")
+    pixel_size: Optional[float] = Field(default=None, description="The pixel size in Å")
+
+
 # Model rebuilds
 # see https://pydantic-docs.helpmanual.io/usage/models/#rebuilding-a-model
 
 CTFMetadata.model_rebuild()
 DefectFile.model_rebuild()
 GainFile.model_rebuild()
+Map.model_rebuild()
 MovieFrame.model_rebuild()
 MovieStack.model_rebuild()
 MovieStackCollection.model_rebuild()
-MovieStackSeries.model_rebuild()
+MovieStackSet.model_rebuild()
+SubTomogram.model_rebuild()
+SubTomogramSet.model_rebuild()
 TiltSeriesMicrograph.model_rebuild()
 TiltSeriesMicrographStack.model_rebuild()
 TiltSeriesSet.model_rebuild()
+Tomogram.model_rebuild()
+TomogramSet.model_rebuild()

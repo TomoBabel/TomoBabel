@@ -41,6 +41,7 @@ dependencies = [
 
 optional-dependencies.dev = [
     "black==24.1.1",  # this version should match the one in .pre-commit-config.yaml
+    "deepdiff",
     "flake8==7.0.0",  # this version should match the one in .pre-commit-config.yaml
     "mypy==1.8.0",  # this version should match the one in .pre-commit-config.yaml
     "flake8-pyproject",

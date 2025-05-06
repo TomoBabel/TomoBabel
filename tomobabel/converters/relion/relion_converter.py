@@ -109,7 +109,6 @@ def main(in_args=None) -> DataSet:
         in_args = sys.argv[1:]
     parser = get_arguments()
     args = parser.parse_args(in_args)  # create the DataSet object
-    regions = []
 
     # write the tilt series data to the Dataset
     converted_tilt_series = get_tilt_series_data(
@@ -118,12 +117,13 @@ def main(in_args=None) -> DataSet:
         args.gain_reference,
         args.defect_file,
     )
+    regions = []
     for tilt_series in converted_tilt_series.all_tilt_series:
         movie_stack_collections = converted_tilt_series.all_movie_collections[
             tilt_series
         ]
         tiltseries_container = TomoImageSet(raw_movies=movie_stack_collections)
-        region = Region(tilt_series=[tiltseries_container])
+        region = Region(tomo_imaging=[tiltseries_container])
         regions.append(region)
     dataset = DataSet(regions=regions)
 
