@@ -7,7 +7,6 @@ include-package-data = false
 
 [tool.setuptools.packages.find]
 include = ["tomobabel*"]
-exclude = ["data_model", "scripts"]
 namespaces = false
 
 [project]

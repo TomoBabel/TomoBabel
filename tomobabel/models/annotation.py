@@ -6,7 +6,12 @@ from typing import Optional, List, Union
 import numpy as np
 from pydantic import Field, field_validator, model_validator
 
-from tomobabel.models.basemodels import ConfiguredBaseModel, CoordsLogical, Annotation
+from tomobabel.models.basemodels import (
+    CoordsLogical,
+    Annotation,
+    AnnotationSet,
+    AnnotationSetTypes,
+)
 from tomobabel.models.transformations import AffineTransform
 
 
@@ -38,15 +43,15 @@ class AnnotationType(str, Enum):
 class Cone(Annotation):
     type: str = AnnotationType.cone
     vector: Vector = Field(
-        default=..., description="Vector for the center line of the cylinder"
+        default=..., description="Vector for the center line of the cone"
     )
-    start_diameter: float = Field(
+    start_radius: float = Field(
         default=..., description="Diameter of the base of the cone"
     )
-    end_diameter: float = Field(
+    end_radius: float = Field(
         default=0.0,
         description=(
-            "Diameter of the end of the cone, if 0.0, the cone comes to a sharp point,"
+            "Radius of the end of the cone, if 0.0, the cone comes to a sharp point,"
             "otherwise it is cut off"
         ),
     )
@@ -86,7 +91,7 @@ class Cylinder(Annotation):
     vector: Vector = Field(
         default=..., description="Vector for the center line of the cylinder"
     )
-    diameter: float = Field(default=..., description="The diameter of the cylinder")
+    radius: float = Field(default=..., description="The radius of the cylinder")
 
 
 class FitMap(Annotation):
@@ -111,8 +116,8 @@ class Ovoid(Annotation):
     vector: Vector = Field(
         default=..., description="Vector that describes the center line of the ovoid"
     )
-    waist_size: float = Field(
-        default=..., description="The length across the ovoid at its widest point"
+    waist_radius: float = Field(
+        default=..., description="The radius of the ovoid at its widest point"
     )
     waist_point: Optional[Point] = Field(
         default=None,
@@ -174,6 +179,8 @@ class Shell(Annotation):
         default=..., description="These volumes will be subtracted from the base volume"
     )
 
+    # TODO: Validate the cutouts overlap with the base, raise warning otherwise
+
 
 class Sphere(Annotation):
     """A sphere or circle of radius 'radius' centered on a coordinate"""
@@ -182,7 +189,7 @@ class Sphere(Annotation):
     center: Point = Field(
         default=..., description="The center point of the circle/sphere"
     )
-    radius: float = Field(default=..., description="The sphere diameter")
+    radius: float = Field(default=..., description="The sphere radius")
 
     @property
     def coord_array(self):
@@ -201,7 +208,7 @@ class Spline(Annotation):
 
 
 class Vector(Annotation):
-    """A defined by two points"""
+    """A vector defined by two points"""
 
     type: str = AnnotationType.vector
     start: Point
@@ -213,7 +220,7 @@ class Vector(Annotation):
         return self
 
     @property
-    def points(self) -> np.ndarray:
+    def points(self) -> List[np.ndarray]:
         """
         Get the start and end points of the vector as arrays
 
@@ -222,7 +229,7 @@ class Vector(Annotation):
         """
         start_coords = self.start.coord_array
         end_coords = self.end.coord_array
-        return np.array([start_coords, end_coords])
+        return [start_coords, end_coords]
 
     @property
     def vector(self) -> np.ndarray:
@@ -245,23 +252,6 @@ class Vector(Annotation):
         """
         norm = np.linalg.norm(self.vector)
         return self.vector / norm
-
-
-class AnnotationSetTypes(str, Enum):
-    """
-    Types for sets of annotations
-    """
-
-    general = "annotations"
-    particle_coords = "particle_coordinates"
-
-
-class AnnotationSet(ConfiguredBaseModel):
-    name: str = Field(
-        default=AnnotationSetTypes.general,
-        description="The name of the annotation set EG 'Membranes' or 'Ribosomes'",
-    )
-    annotations: List[Annotation] = Field(default=..., description="The annotations")
 
 
 class ParticleCoordinatesSet(AnnotationSet):

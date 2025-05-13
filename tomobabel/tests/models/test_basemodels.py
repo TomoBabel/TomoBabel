@@ -1,34 +1,13 @@
-import os
-import shutil
-import tempfile
-import unittest
-from pathlib import Path
-
 import numpy as np
 
 from tomobabel.models.basemodels import (
     CoordsPhysical,
     CoordsLogical,
 )
-from tomobabel.tests.converters.relion import test_data
+from tomobabel.tests.testing_tools import TomoBabelTest
 
 
-class BaseModelsTest(unittest.TestCase):
-    def setUp(self):
-        """
-        Setup test data and output directories.
-        """
-        self.test_data = Path(os.path.dirname(test_data.__file__))
-        self.test_dir = tempfile.mkdtemp(prefix="tomobabl_test")
-
-        # Change to test directory
-        self._orig_dir = os.getcwd()
-        os.chdir(self.test_dir)
-
-    def tearDown(self):
-        os.chdir(self._orig_dir)
-        if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
+class BaseModelsTest(TomoBabelTest):
 
     def test_get_coords_array_physical3D(self):
         coords = CoordsPhysical(x=10, y=11, z=12)

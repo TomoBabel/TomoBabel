@@ -1,7 +1,4 @@
 import json
-import os
-import shutil
-import tempfile
 import unittest
 from deepdiff import DeepDiff
 from pathlib import Path, PosixPath
@@ -25,27 +22,11 @@ from tomobabel.models.tomo_images import (
 )
 from tomobabel.models.transformations import MotionCorrectionTransformation
 from tomobabel.models.basemodels import Annotation
-from tomobabel.tests.converters.relion import test_data
-from tomobabel.tests.converters.relion.relion_testing_utils import setup_tomo_dirs
+from tomobabel.tests.converters.relion.relion_testing_utils import TomoBabelRelionTest
 from tomobabel.utils import clean_dict
 
 
-class CziiTiltSeriesConverterTest(unittest.TestCase):
-    def setUp(self):
-        """
-        Setup test data and output directories.
-        """
-        self.test_data = Path(os.path.dirname(test_data.__file__))
-        self.test_dir = tempfile.mkdtemp(prefix="ccpem-czii_converter")
-
-        # Change to test directory
-        self._orig_dir = os.getcwd()
-        os.chdir(self.test_dir)
-
-    def tearDown(self):
-        os.chdir(self._orig_dir)
-        if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
+class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
 
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_instantiate_relion_tilt_series_movie_object(self, mock_dims):
@@ -86,7 +67,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
         }
 
     def test_converter_get_tilt_series_dict(self):
-        setup_tomo_dirs()
+        self.setup_tomo_dirs()
         converter = PipelinerTiltSeriesGroupConverter(
             input_file=Path("Import/job001/tilt_series.star")
         )
@@ -103,7 +84,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
     def test_converter_get_movies_data(self, mockmrc):
         """Gets the move object for each movie, without frame data"""
         mockmrc.return_value = 2000, 2000
-        setup_tomo_dirs()
+        self.setup_tomo_dirs()
         converter = PipelinerTiltSeriesGroupConverter(
             input_file=Path("Import/job001/tilt_series.star")
         )
@@ -128,7 +109,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
         }
 
     def test_converter_get_ctf_data(self):
-        setup_tomo_dirs()
+        self.setup_tomo_dirs()
         ts = cif.read_file("CtfFind/job003/tilt_series/TS_01.star")
         block = ts.find_block("TS_01")
         converter = PipelinerTiltSeriesGroupConverter(
@@ -145,7 +126,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
         }
 
     def test_converter_get_transformation_data(self):
-        setup_tomo_dirs()
+        self.setup_tomo_dirs()
         ts = cif.read_file("AlignTiltSeries/job005/tilt_series/TS_01.star")
         block = ts.find_block("TS_01")
         converter = PipelinerTiltSeriesGroupConverter(
@@ -165,7 +146,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
 
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_converter_get_gain_and_defect_files(self, mockdims):
-        setup_tomo_dirs()
+        self.setup_tomo_dirs()
         mockdims.return_value = 2000, 2000, 1
 
         converter = PipelinerTiltSeriesGroupConverter(
@@ -176,7 +157,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
         assert defect == DefectFile(path="my_defect_file.mrc", height=2000, width=2000)
 
     def test_converter_make_movie_collections_data(self):
-        setup_tomo_dirs()
+        self.setup_tomo_dirs()
         ts = cif.read_file("Import/job001/tilt_series/TS_01.star")
         block = ts.find_block("TS_01")
         converter = PipelinerTiltSeriesGroupConverter(
@@ -442,7 +423,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_converter_do_conversion_import_job(self, mockmrc):
         mockmrc.return_value = 2000, 2000
-        setup_tomo_dirs()
+        self.setup_tomo_dirs()
         converter = PipelinerTiltSeriesGroupConverter(
             input_file=Path("Import/job001/tilt_series.star")
         )
@@ -465,7 +446,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_converter_do_conversion_with_CTF_job(self, mockmrc):
         mockmrc.return_value = 2000, 2000
-        setup_tomo_dirs()
+        self.setup_tomo_dirs()
         converter = PipelinerTiltSeriesGroupConverter(
             input_file=Path("CtfFind/job003/tilt_series_ctf.star")
         )
@@ -490,7 +471,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
     def test_converter_do_conversion_with_CTF_job_with_gain_and_defect(self, mockmrc):
         """Output should contain gain ref and defect file info, when provided"""
         mockmrc.return_value = 2000, 2000
-        setup_tomo_dirs()
+        self.setup_tomo_dirs()
         converter = PipelinerTiltSeriesGroupConverter(
             input_file=Path("CtfFind/job003/tilt_series_ctf.star"),
             gain_file="my_gain_file.mrc",
@@ -517,7 +498,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
     def test_converter_do_conversion_with_MotionCorr_job(self, mockmrc):
         """This one will have gain ref a defect file info"""
         mockmrc.return_value = 2000, 2000
-        setup_tomo_dirs()
+        self.setup_tomo_dirs()
         converter = PipelinerTiltSeriesGroupConverter(
             input_file=Path("MotionCorr/job002/corrected_tilt_series.star")
         )
@@ -541,7 +522,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_converter_do_conversion_align_job(self, mockmrc):
         mockmrc.return_value = 2000, 2000
-        setup_tomo_dirs()
+        self.setup_tomo_dirs()
         converter = PipelinerTiltSeriesGroupConverter(
             input_file=Path("AlignTiltSeries/job005/aligned_tilt_series.star")
         )
@@ -565,7 +546,7 @@ class CziiTiltSeriesConverterTest(unittest.TestCase):
     @patch("tomobabel.converters.relion.relion_convert_tilt_series.get_mrc_dims")
     def test_main_with_outputs_dir(self, mockdims):
         mockdims.return_value = 2000, 2000
-        setup_tomo_dirs()
+        self.setup_tomo_dirs()
         tilt_series_main(
             in_args=[
                 "--input_starfile",

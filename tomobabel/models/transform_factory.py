@@ -6,7 +6,6 @@ from scipy.spatial.transform import Rotation as R
 from tomobabel.models.transformations import (
     FlipTransform,
     ScaleTransform,
-    AffineTransform,
     TranslationTransform,
     RotationTransform,
 )
@@ -53,7 +52,7 @@ def scale_transform(factor: float) -> ScaleTransform:
 
 def rotation_transform_from_eulers(
     convention: str, phi: float, psi: float, theta: float
-) -> AffineTransform:
+) -> RotationTransform:
     rotation = R.from_euler(convention, [phi, theta, psi], degrees=True)
     return RotationTransform(trans_matrix=rotation.as_matrix())
 
@@ -69,10 +68,10 @@ def translation(
         z_shift (float): Shift in z
 
     Returns:
-        AffineTransformation: The transformation object
+        RotationTransform: The transformation object
     """
     matrix = np.identity(4)
     matrix[0, 3] = x_shift
     matrix[1, 3] = y_shift
     matrix[2, 3] = z_shift
-    return AffineTransform(trans_matrix=matrix)
+    return TranslationTransform(trans_matrix=matrix)

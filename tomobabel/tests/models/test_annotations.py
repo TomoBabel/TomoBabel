@@ -1,35 +1,14 @@
-import os
-import shutil
-import tempfile
-import unittest
-from pathlib import Path
-
 import numpy as np
 
 from tomobabel.models.annotation import Point, Vector, Sphere, Ovoid
-from tomobabel.tests.converters.relion import test_data
+from tomobabel.tests.testing_tools import TomoBabelTest
 
 test_point1 = Point(x=10.0, y=20.0, z=30)
 test_point2 = Point(x=110.0, y=120.0, z=130)
 test_vector1 = Vector(start=test_point1, end=test_point2)
 
 
-class AnnotationModelsTest(unittest.TestCase):
-    def setUp(self):
-        """
-        Setup test data and output directories.
-        """
-        self.test_data = Path(os.path.dirname(test_data.__file__))
-        self.test_dir = tempfile.mkdtemp(prefix="tomobabl_test")
-
-        # Change to test directory
-        self._orig_dir = os.getcwd()
-        os.chdir(self.test_dir)
-
-    def tearDown(self):
-        os.chdir(self._orig_dir)
-        if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
+class AnnotationModelsTest(TomoBabelTest):
 
     def test_get_point_array_2D(self):
         point = Point(x=10.0, y=20.0)
@@ -62,7 +41,7 @@ class AnnotationModelsTest(unittest.TestCase):
         assert (sp.coord_array == np.array([[10.0], [20.0], [30.0]])).all()
 
     def test_ovoid_with_default_waist_point(self):
-        ovoid = Ovoid(vector=test_vector1, waist_size=10)
+        ovoid = Ovoid(vector=test_vector1, waist_radius=10)
         assert np.isclose(
             ovoid.waist_point.coord_array, np.array([[60], [70], [80]])
         ).all()
@@ -70,7 +49,7 @@ class AnnotationModelsTest(unittest.TestCase):
     def test_ovoid_with_defined_waist_point(self):
         ovoid = Ovoid(
             vector=test_vector1,
-            waist_size=10,
+            waist_radius=10,
             waist_point=Point(x=60.0, y=70.0, z=80.0),
         )
         assert np.isclose(

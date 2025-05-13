@@ -4,25 +4,18 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tomobabel.tests.converters.relion import test_data
 
-
-class CziiNodeToolsTest(unittest.TestCase):
+class TomoBabelTest(unittest.TestCase):
     def setUp(self):
         """
         Setup test data and output directories.
         """
-        self.test_data = Path(os.path.dirname(test_data.__file__))
-        self.test_dir = tempfile.mkdtemp(prefix="ccpem-czii_converter")
-
+        self.test_dir = Path(tempfile.mkdtemp(prefix="tomobabl_test"))
         # Change to test directory
         self._orig_dir = os.getcwd()
         os.chdir(self.test_dir)
 
     def tearDown(self):
         os.chdir(self._orig_dir)
-        if os.path.exists(self.test_dir):
+        if self.test_dir.is_dir():
             shutil.rmtree(self.test_dir)
-
-    def test_setup_tomo_dirs(self):
-        pass

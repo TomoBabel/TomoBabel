@@ -1,36 +1,14 @@
-import os
-import shutil
-import tempfile
-import unittest
-from pathlib import Path
-
 import numpy as np
-
 from tomobabel.models.transform_factory import (
     flip_transform,
     scale_transform,
     rotation_transform_from_eulers,
     translation,
 )
-from tomobabel.tests.converters.relion import test_data
+from tomobabel.tests.testing_tools import TomoBabelTest
 
 
-class TransformFactoryTest(unittest.TestCase):
-    def setUp(self):
-        """
-        Setup test data and output directories.
-        """
-        self.test_data = Path(os.path.dirname(test_data.__file__))
-        self.test_dir = tempfile.mkdtemp(prefix="tomobabl_test")
-
-        # Change to test directory
-        self._orig_dir = os.getcwd()
-        os.chdir(self.test_dir)
-
-    def tearDown(self):
-        os.chdir(self._orig_dir)
-        if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
+class TransformFactoryTest(TomoBabelTest):
 
     def test_flip_transform_x(self):
         xform = flip_transform(["x"])

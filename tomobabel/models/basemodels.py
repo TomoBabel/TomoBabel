@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Optional, List
+from typing import Optional, List, Union
 
 import numpy as np
 from pydantic import BaseModel, ConfigDict
@@ -8,21 +8,23 @@ from pydantic import Field
 metamodel_version = "None"
 version = "0.0.1"
 
+basemodel_config = ConfigDict(
+    validate_assignment=True,
+    validate_default=True,
+    extra="forbid",
+    arbitrary_types_allowed=True,
+    use_enum_values=True,
+    strict=False,
+    json_encoders={np.ndarray: lambda a: a.tolist()},
+)
+
 
 class Annotation(BaseModel):
     """
     BaseClass to hold annotations
     """
 
-    model_config = ConfigDict(
-        validate_assignment=True,
-        validate_default=True,
-        extra="forbid",
-        arbitrary_types_allowed=True,
-        use_enum_values=True,
-        strict=False,
-        json_encoders={np.ndarray: lambda a: a.tolist()},
-    )
+    model_config = basemodel_config
 
     type: str = "text"
     description: str = Field(
@@ -30,23 +32,42 @@ class Annotation(BaseModel):
     )
 
 
+class AnnotationSetTypes(str, Enum):
+    """
+    Types for sets of annotations
+    """
+
+    general = "annotations"
+    particle_coords = "particle_coordinates"
+
+
+class AnnotationSet(BaseModel):
+    model_config = basemodel_config
+
+    name: str = Field(
+        default=AnnotationSetTypes.general,
+        description="The name of the annotation set EG 'Membranes' or 'Ribosomes'",
+    )
+    annotations: List[Annotation] = Field(default=..., description="The annotations")
+
+
 class ConfiguredBaseModel(BaseModel):
     """
     Base model with an annotation
     """
 
-    model_config = ConfigDict(
-        validate_assignment=True,
-        validate_default=True,
-        extra="forbid",
-        arbitrary_types_allowed=True,
-        use_enum_values=True,
-        strict=False,
-        json_encoders={np.ndarray: lambda a: a.tolist()},
-    )
-    annotations: List[Annotation] = Field(
+    model_config = basemodel_config
+
+    annotations: List[Union[Annotation, AnnotationSet]] = Field(
         default_factory=list, description="Annotations for this Image"
     )
+
+    def add_text_annotation(self, text: str) -> None:
+        if text:
+            self.annotations.append(Annotation(description=text))
+
+    def add_annotation(self, annotation: Union[Annotation, AnnotationSet]) -> None:
+        self.annotations.append(annotation)
 
 
 class Image2D(ConfiguredBaseModel):
@@ -100,6 +121,7 @@ class CoordsPhysical(ConfiguredBaseModel):
     x: int = Field(default=..., description="x coord")
     y: int = Field(default=..., description="y coord")
     z: Optional[int] = Field(default=None, description="z coord")
+    description: str = Field(default="", description="Any text for this coordinate")
 
     @property
     def dim(self) -> int:
@@ -129,6 +151,7 @@ class CoordsLogical(ConfiguredBaseModel):
     x: float = Field(default=..., description="x coord")
     y: float = Field(default=..., description="y coord")
     z: Optional[float] = Field(default=None, description="z coord")
+    description: str = Field(default="", description="Any text for this coordinate")
 
     @property
     def dim(self) -> int:
