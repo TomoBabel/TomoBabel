@@ -5,8 +5,8 @@ from tomobabel.tests.testing_tools import TomoBabelTest
 
 p1 = np.array([[10.0], [20.0], [30.0]])
 p2 = np.array([[40.0], [50.0], [60.0]])
-p3 = np.array([10.0], [20.0])
-p4 = np.array([30.0], [40.0])
+p3 = np.array([[10.0], [20.0]])
+p4 = np.array([[30.0], [40.0]])
 
 
 class AnnotationFactoryTest(TomoBabelTest):
