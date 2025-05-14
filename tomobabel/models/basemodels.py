@@ -158,7 +158,7 @@ class CoordsLogical(ConfiguredBaseModel):
         return 3 if self.z is not None else 2
 
     @property
-    def coord_array(self) -> np.ndarray:
+    def coords(self) -> np.ndarray:
         if self.dim == 3:
             return np.array([[self.x], [self.y], [self.z]])
         else:

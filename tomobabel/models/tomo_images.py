@@ -226,6 +226,9 @@ class Tomogram(Image3D):
     """Holds a tomogram"""
 
     file: Optional[str] = Field(default=None, description="Path to the file")
+    maps: List[Map] = Field(
+        default_factory=[], description="Maps derived from this tomogram"
+    )
 
 
 class TomogramSet(ConfiguredBaseModel):
@@ -263,6 +266,9 @@ class SubTomogramSet(ConfiguredBaseModel):
 
     Subtomograms: List[SubTomogram] = Field(
         default_factory=[], description="Sets of subtomograms extracted from a tomogram"
+    )
+    maps: List[Map] = Field(
+        default_factory=[], description="Maps derived from this set of subtomograms"
     )
 
 

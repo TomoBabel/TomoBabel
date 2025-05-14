@@ -19,8 +19,8 @@ class BaseModelsTest(TomoBabelTest):
 
     def test_get_coords_array_logical3D(self):
         coords = CoordsLogical(x=10.0, y=11.0, z=12.0)
-        assert (coords.coord_array == np.array([[10.0], [11.0], [12.0]])).all()
+        assert (coords.coords == np.array([[10.0], [11.0], [12.0]])).all()
 
     def test_get_coords_array_logical2D(self):
         coords = CoordsLogical(x=10.0, y=11.0)
-        assert (coords.coord_array == np.array([[10.0], [11.0]])).all()
+        assert (coords.coords == np.array([[10.0], [11.0]])).all()

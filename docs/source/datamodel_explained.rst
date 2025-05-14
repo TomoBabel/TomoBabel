@@ -32,17 +32,18 @@ for each frame in the movie.
 **Aligned tilt series**
 
 Inside  ``MovieStack`` Aligned tilt series derived from that set of movies are stored in
-``TiltSeriesSet`` containing ``TiltSeriesMicrographStack`` objects that contain a
+``TiltSeriesSet`` containing ``TiltSeriesMicrographStack`` objects with a
 ``TiltSeriesMicrograph`` for each image (Merged movie for that tilt)
 
 **Reconstructed Tomograms**
 
-Inside the a``TiltSeriesMicrographStack`` can be a ``TomogramSet`` object containing
-(you guessed it!) ``Tomogram`` objects for tomograms geberated from the aligned tilt
+Inside the a``TiltSeriesMicrographStack`` can be a ``TomogramSet`` objects containing
+(you guessed it!) ``Tomogram`` objects for tomograms generated from the aligned tilt
 series
 
-Inside each ``Tomogram`` object are ``SubTomogramSet`` and ``MapSet`` objects that
-contain ``SubTomogram`` and ``Map`` objects associated with that tomogram.
+Inside each ``Tomogram`` object is a ``SubTomogramSet`` objects that
+contains ``SubTomogram`` objects associated with that tomogram and ``Map`` objects
+for any maps derived from the set of subtomograms.
 
 **Annotations**
 
@@ -79,9 +80,8 @@ Tree
  |  |  |  |  |  |- TiltSeriesMicrographStack
  |  |  |  |  |  |  |- TiltSeriesMicrograph
  |  |  |  |  |  |  |- CTFMetadata
- |  |  |  |  |  |- TomogramSet
- |  |  |  |  |  |  |- Tomogram
- |  |  |  |  |  |  |  |- SubTomgramSet
- |  |  |  |  |  |  |  |  |- SubTomogram
- |  |  |  |  |  |  |  |- MapSet
- |  |  |  |  |  |  |  |  |- Map
+ |  |  |  |  |  |  |- TomogramSet
+ |  |  |  |  |  |  |  |- Tomogram
+ |  |  |  |  |  |  |  |  |- SubTomgramSet
+ |  |  |  |  |  |  |  |  |  |- SubTomogram
+ |  |  |  |  |  |  |  |  |  |- Map

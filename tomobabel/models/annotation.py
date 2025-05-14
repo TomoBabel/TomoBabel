@@ -18,11 +18,6 @@ from tomobabel.models.transformations import AffineTransform
 # TODO: give all these helper properties like center, corners vector and etc,
 
 
-def check_input_dims(inputs: List[object]):
-    if not all([isinstance(x, type(inputs[0])) for x in inputs]):
-        raise ValueError("Input dimensions do not match")
-
-
 class AnnotationType(str, Enum):
     point = "point"
     particle = "particle_coodinate"
@@ -38,6 +33,21 @@ class AnnotationType(str, Enum):
     volumne = "volume"
     map = "fit_map"
     text = "text"
+
+
+def check_input_dims(inputs: List[Point]) -> None:
+    """
+    Check the dimensions of input points match
+
+    Args:
+        inputs (List[Point]): The input CETS Point objects
+
+    Raises:
+        ValueError: If the dimensionality of the points is not the same
+    """
+    if not all([x.dim == inputs[0].dim for x in inputs]):
+        dims = ", ".join([str(x.dim) for x in inputs])
+        raise ValueError(f"Input dimensions do not match: {dims}")
 
 
 class Cone(Annotation):
@@ -59,31 +69,36 @@ class Cone(Annotation):
 
 class Cuboid(Annotation):
     """
-    A cuboidal box defined by two or three vectors
+    A cuboid (3D) or rectangular (2D) box defined by two or three vectors
+
+    Vectors point to two diagonally opposite corners of the box
     """
 
     type: str = AnnotationType.cuboid
-    center: Point = Field(default=..., description="The center of the box")
     v1: Vector = Field(
         default=...,
-        description="A vector that points to a face of the box from the center point",
+        description="A vector that points to a corner of the box from the center point",
     )
-    v2: Optional[Vector] = Field(
+    v2: Vector = Field(
         default=None,
         description=(
-            "A vector that points to the 2nd face of the box, if None it will be set "
-            "as 90° from v1 to make a square/cube"
-        ),
-    )
-    v3: Optional[Vector] = Field(
-        default=None,
-        description=(
-            "A vector that points to the 3nd face of the box, if None it will be set as"
-            "90° from v2 to make a square/cube"
+            "A vector that points to the diagonally opposite corner of the box"
         ),
     )
 
-    # TODO: write function that calculates V2 and V3 automatically for a cube
+    @model_validator(mode="after")
+    def validate_inputs(self) -> Cuboid:
+        check_input_dims([self.v1.start, self.v2.start])
+        if not np.allclose(self.v1.start.coords, self.v2.start.coords):
+            raise ValueError("Both corner vectors must originate at the same point")
+        return self
+
+    @property
+    def center_point(self) -> np.ndarray:
+        if self.v1.start.dim == 2:
+            return np.array([[self.v1.start.x], [self.v1.start.y]])
+        else:
+            return np.array([[self.v1.start.x], [self.v1.start.y], [self.v1.start.z]])
 
 
 class Cylinder(Annotation):
@@ -135,15 +150,15 @@ class Ovoid(Annotation):
     def model_post_init(self, __context) -> None:
         # calculate the waist point if not given
         if self.waist_point is None:
-            mids = (self.vector.start.coord_array + self.vector.end.coord_array) / 2
+            mids = (self.vector.start.coords + self.vector.end.coords) / 2
             self.waist_point = Point(
                 x=mids[0, 0],
                 y=mids[1, 0],
                 z=None if self.vector.start.dim == 2 else mids[2, 0],
             )
         # verify waist point is on the central vector
-        v = self.vector.end.coord_array - self.vector.start.coord_array
-        w = self.waist_point.coord_array - self.vector.start.coord_array
+        v = self.vector.end.coords - self.vector.start.coords
+        w = self.waist_point.coords - self.vector.start.coords
 
         v_flat = v.flatten()
         w_flat = w.flatten()
@@ -165,6 +180,9 @@ class Particle(Point):
     fom: Optional[float] = Field(
         default=None, description="Figure of merit for autopicking"
     )
+    alignment_transformations: List[AffineTransform] = Field(
+        default_factory=[], description="Transformations applied to align this particle"
+    )
 
 
 class Shell(Annotation):
@@ -180,6 +198,7 @@ class Shell(Annotation):
     )
 
     # TODO: Validate the cutouts overlap with the base, raise warning otherwise
+    #  This will be very complicated!
 
 
 class Sphere(Annotation):
@@ -192,8 +211,8 @@ class Sphere(Annotation):
     radius: float = Field(default=..., description="The sphere radius")
 
     @property
-    def coord_array(self):
-        return self.center.coord_array
+    def center_point(self):
+        return self.center.coords
 
 
 class Spline(Annotation):
@@ -205,6 +224,11 @@ class Spline(Annotation):
         if len(value) < 3:
             raise ValueError("A spline must have at least 3 points")
         return value
+
+    @model_validator(mode="after")
+    def check_waist_point_dim(self) -> Spline:
+        check_input_dims(self.points)
+        return self
 
 
 class Vector(Annotation):
@@ -227,8 +251,8 @@ class Vector(Annotation):
         Returns:
             np.ndarry: the start and end point arrays
         """
-        start_coords = self.start.coord_array
-        end_coords = self.end.coord_array
+        start_coords = self.start.coords
+        end_coords = self.end.coords
         return [start_coords, end_coords]
 
     @property
@@ -255,6 +279,10 @@ class Vector(Annotation):
 
 
 class ParticleCoordinatesSet(AnnotationSet):
+    """
+    An AnnotationSet subclass for a set of picked particle coordinates
+    """
+
     type: str = AnnotationSetTypes.particle_coords
     particles: List[Particle] = Field(
         default_factory=[], description="Picked particle coorindates"
