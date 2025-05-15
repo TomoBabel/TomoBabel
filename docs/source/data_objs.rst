@@ -21,21 +21,11 @@ All other types of data will live in these top level types
     :show-inheritance:
     :exclude-members: model_config
 
-Tilt series
------------
-These describe data associated with tilt series
+Imaging
+-------
+These describe data associated with images
 
-.. automodule:: tomobabel.models.tilt_series
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :exclude-members: model_config
-
-Tomograms
----------
-These describe data associated with reconstructed tomograms
-
-.. automodule:: tomobabel.models.tilt_series
+.. automodule:: tomobabel.models.tomo_images
     :members:
     :undoc-members:
     :show-inheritance:
