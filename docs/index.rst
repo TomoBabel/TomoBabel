@@ -9,10 +9,9 @@ TomoBabel
 
 TomoBabel  is designed to facilitate transfer and reuse of cryo-electron tomography
 (cryoET) data through a standardized data format (CETS).  The library and command line programs
-convert data from cryoET data processing software to the CETS and from the CETS to various
-software formats, allowing interoperability between different packages.
+convert data to and from cryoET data processing software to CETS allowing interoperability between different packages.
 
-The CETS will be adopted by both the `CZII CryoET DataPortal <https://cryoetdataportal.czscience.com/>`_
+CETS will be adopted by both the `CZII CryoET DataPortal <https://cryoetdataportal.czscience.com/>`_
 and `Electron Microscopy Public Image Archive (EMPIAR) <https://www.ebi.ac.uk/empiar/>`_.
 
 General info and installation
