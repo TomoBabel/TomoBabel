@@ -1,11 +1,4 @@
-.. TomoBabel documentation master file, created by
-   sphinx-quickstart on Tue Jul  6 13:40:49 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-
-
-.. image:: source/tblogo.png
+.. image:: files/tblogo.png
   :width: 350
   :alt: TomoBabel logo
   :align: center

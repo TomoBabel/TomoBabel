@@ -133,6 +133,10 @@ class MovieStackSet(ConfiguredBaseModel):
     movie_stacks: List[MovieStack] = Field(
         default_factory=list, description="The movie stacks"
     )
+    tilt_series: List[TiltSeriesMicrographStack] = Field(
+        default_factory=[],
+        description="Sets of tilt series micrographs from this set of movie stacks",
+    )
 
 
 class MovieStackCollection(ConfiguredBaseModel):
@@ -226,8 +230,9 @@ class Tomogram(Image3D):
     """Holds a tomogram"""
 
     file: Optional[str] = Field(default=None, description="Path to the file")
-    maps: List[Map] = Field(
-        default_factory=[], description="Maps derived from this tomogram"
+    subtomograms: List[SubTomogramSet] = Field(
+        default_factory=[],
+        description="Sets of subtomograms extracted from this tomogram",
     )
 
 

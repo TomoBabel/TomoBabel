@@ -1,11 +1,19 @@
 The CETS data model explained
 =============================
 
-The data model is based on geometry standards discussed at the April 2024 CZII/EBI
+The CETS data model is based on geometry standards discussed at the April 2024 CZII/EBI
 tomography standards meeting. (Cambridge, UK).
 
 The full description is available in the
 forthcoming :download:`whitepaper (draft) <../files/GeometryStandards.pdf>`
+
+Overview
+--------
+
+.. image:: ../files/models_diagram.png
+  :width: 1000
+  :alt: data model
+  :align:  left
 
 Data Hierarchy
 --------------
@@ -60,28 +68,3 @@ So...
 
 - a ``Tomogram`` could have ``FitMap`` object in the ``annotations`` which contains the
   path to a map and the matrix that transforms it to align it in the tomogram
-
-Tree
-----
-
-.. code-block:: text
-
- DataSet
- |- Region
- |  |- NonTomoImageSet
- |  |- TomoImageSet
- |  |  |- MovieStackSet
- |  |  |  |- GainFile
- |  |  |  |- DefectFile
- |  |  |  |- MovieStack
- |  |  |  |  |- Movieframe
- |  |  |  |  |- CTFMetadata
- |  |  |  |  |- TiltSeriesSet
- |  |  |  |  |  |- TiltSeriesMicrographStack
- |  |  |  |  |  |  |- TiltSeriesMicrograph
- |  |  |  |  |  |  |- CTFMetadata
- |  |  |  |  |  |  |- TomogramSet
- |  |  |  |  |  |  |  |- Tomogram
- |  |  |  |  |  |  |  |  |- SubTomgramSet
- |  |  |  |  |  |  |  |  |  |- SubTomogram
- |  |  |  |  |  |  |  |  |  |- Map

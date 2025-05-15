@@ -1,7 +1,7 @@
 Writing Converters
 ==================
 
-When adding a new converter for a sepcific program it should be put in a directory
+When adding a new converter for a specific program it should be put in a directory
 ``tomobabel/converters/<software_name>``.
 
 Converters should conform to the following guidelines:
@@ -15,9 +15,9 @@ Converters should conform to the following guidelines:
    CETS ``DataSet``
 
 #. It should have the ability to separately convert individual parts of a project to the
-   CETS data format
+   appropriate CETS data format objects.
 
-#. Write doncumentations for the converter.  Make a folder in ``docs/source/converters``
+#. Write documentation for the converter.  Make a folder in ``docs/source/converters``
    with full documentation and update ``docs/source/index.rst`` to display it.
 
 #. Write tests for your converter.  Make a dir in ``tomobabel/tests/converters`` and
