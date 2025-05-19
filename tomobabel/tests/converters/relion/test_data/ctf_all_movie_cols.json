@@ -12720,7 +12720,8 @@
                         ],
                         "path": "frames/TS_01_040_60.0.mrc"
                     }
-                ]
+                ],
+                "tilt_series": []
             }
         ],
         "gain_file": null,
@@ -25447,7 +25448,8 @@
                         ],
                         "path": "frames/TS_03_040_60.0.mrc"
                     }
-                ]
+                ],
+                "tilt_series": []
             }
         ],
         "gain_file": null,
@@ -41290,7 +41292,8 @@
                         ],
                         "path": "frames/TS_43_040_60.0.mrc"
                     }
-                ]
+                ],
+                "tilt_series": []
             }
         ],
         "gain_file": null,
@@ -57133,7 +57136,8 @@
                         ],
                         "path": "frames/TS_45_040_60.0.mrc"
                     }
-                ]
+                ],
+                "tilt_series": []
             }
         ],
         "gain_file": null,
@@ -72976,7 +72980,8 @@
                         ],
                         "path": "frames/TS_54_040_60.0.mrc"
                     }
-                ]
+                ],
+                "tilt_series": []
             }
         ],
         "gain_file": null,

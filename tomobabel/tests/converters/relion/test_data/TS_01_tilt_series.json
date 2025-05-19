@@ -16,42 +16,7 @@
             "total_accumulated_dose": 3.0,
             "nominal_tilt_angle": 0.001,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_000_0.0.mrc"
         },
         {
@@ -69,42 +34,7 @@
             "total_accumulated_dose": 6.0,
             "nominal_tilt_angle": 3.00113,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_001_3.0.mrc"
         },
         {
@@ -122,42 +52,7 @@
             "total_accumulated_dose": 9.0,
             "nominal_tilt_angle": -2.99863,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_002_-3.0.mrc"
         },
         {
@@ -175,42 +70,7 @@
             "total_accumulated_dose": 12.0,
             "nominal_tilt_angle": -5.99876,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_003_-6.0.mrc"
         },
         {
@@ -228,42 +88,7 @@
             "total_accumulated_dose": 15.0,
             "nominal_tilt_angle": 6.00126,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_004_6.0.mrc"
         },
         {
@@ -281,42 +106,7 @@
             "total_accumulated_dose": 18.0,
             "nominal_tilt_angle": 9.0014,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_005_9.0.mrc"
         },
         {
@@ -334,42 +124,7 @@
             "total_accumulated_dose": 21.0,
             "nominal_tilt_angle": -8.9989,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_006_-9.0.mrc"
         },
         {
@@ -387,42 +142,7 @@
             "total_accumulated_dose": 24.0,
             "nominal_tilt_angle": -11.9985,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_007_-12.0.mrc"
         },
         {
@@ -440,42 +160,7 @@
             "total_accumulated_dose": 27.0,
             "nominal_tilt_angle": 12.0005,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_008_12.0.mrc"
         },
         {
@@ -493,42 +178,7 @@
             "total_accumulated_dose": 30.0,
             "nominal_tilt_angle": 15.0007,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_009_15.0.mrc"
         },
         {
@@ -546,42 +196,7 @@
             "total_accumulated_dose": 33.0,
             "nominal_tilt_angle": -14.9987,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_010_-15.0.mrc"
         },
         {
@@ -599,42 +214,7 @@
             "total_accumulated_dose": 36.0,
             "nominal_tilt_angle": -17.9988,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_011_-18.0.mrc"
         },
         {
@@ -652,42 +232,7 @@
             "total_accumulated_dose": 39.0,
             "nominal_tilt_angle": 18.0008,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_012_18.0.mrc"
         },
         {
@@ -705,42 +250,7 @@
             "total_accumulated_dose": 42.0,
             "nominal_tilt_angle": 21.0009,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_013_21.0.mrc"
         },
         {
@@ -758,42 +268,7 @@
             "total_accumulated_dose": 45.0,
             "nominal_tilt_angle": -20.9989,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_014_-21.0.mrc"
         },
         {
@@ -811,42 +286,7 @@
             "total_accumulated_dose": 48.0,
             "nominal_tilt_angle": -23.9986,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_015_-24.0.mrc"
         },
         {
@@ -864,42 +304,7 @@
             "total_accumulated_dose": 51.0,
             "nominal_tilt_angle": 24.0006,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_016_24.0.mrc"
         },
         {
@@ -917,42 +322,7 @@
             "total_accumulated_dose": 54.0,
             "nominal_tilt_angle": 27.0007,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_017_27.0.mrc"
         },
         {
@@ -970,42 +340,7 @@
             "total_accumulated_dose": 57.0,
             "nominal_tilt_angle": -26.9992,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_018_-27.0.mrc"
         },
         {
@@ -1023,42 +358,7 @@
             "total_accumulated_dose": 60.0,
             "nominal_tilt_angle": -29.9988,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_019_-30.0.mrc"
         },
         {
@@ -1076,42 +376,7 @@
             "total_accumulated_dose": 63.0,
             "nominal_tilt_angle": 30.0008,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_020_30.0.mrc"
         },
         {
@@ -1129,42 +394,7 @@
             "total_accumulated_dose": 66.0,
             "nominal_tilt_angle": 33.001,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_021_33.0.mrc"
         },
         {
@@ -1182,42 +412,7 @@
             "total_accumulated_dose": 69.0,
             "nominal_tilt_angle": -32.999,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_022_-33.0.mrc"
         },
         {
@@ -1235,42 +430,7 @@
             "total_accumulated_dose": 72.0,
             "nominal_tilt_angle": -35.9986,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_023_-36.0.mrc"
         },
         {
@@ -1288,42 +448,7 @@
             "total_accumulated_dose": 75.0,
             "nominal_tilt_angle": 36.0006,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_024_36.0.mrc"
         },
         {
@@ -1341,42 +466,7 @@
             "total_accumulated_dose": 78.0,
             "nominal_tilt_angle": 39.0007,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_025_39.0.mrc"
         },
         {
@@ -1394,42 +484,7 @@
             "total_accumulated_dose": 81.0,
             "nominal_tilt_angle": -38.9987,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_026_-39.0.mrc"
         },
         {
@@ -1447,42 +502,7 @@
             "total_accumulated_dose": 84.0,
             "nominal_tilt_angle": -41.9989,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_027_-42.0.mrc"
         },
         {
@@ -1500,42 +520,7 @@
             "total_accumulated_dose": 87.0,
             "nominal_tilt_angle": 42.0009,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_028_42.0.mrc"
         },
         {
@@ -1553,42 +538,7 @@
             "total_accumulated_dose": 90.0,
             "nominal_tilt_angle": 45.001,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_029_45.0.mrc"
         },
         {
@@ -1606,42 +556,7 @@
             "total_accumulated_dose": 93.0,
             "nominal_tilt_angle": -44.999,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_030_-45.0.mrc"
         },
         {
@@ -1659,42 +574,7 @@
             "total_accumulated_dose": 96.0,
             "nominal_tilt_angle": -47.9986,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_031_-48.0.mrc"
         },
         {
@@ -1712,42 +592,7 @@
             "total_accumulated_dose": 99.0,
             "nominal_tilt_angle": 48.0006,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_032_48.0.mrc"
         },
         {
@@ -1765,42 +610,7 @@
             "total_accumulated_dose": 102.0,
             "nominal_tilt_angle": 51.0008,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_033_51.0.mrc"
         },
         {
@@ -1818,42 +628,7 @@
             "total_accumulated_dose": 105.0,
             "nominal_tilt_angle": -50.9988,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_034_-51.0.mrc"
         },
         {
@@ -1871,42 +646,7 @@
             "total_accumulated_dose": 108.0,
             "nominal_tilt_angle": -53.9989,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_035_-54.0.mrc"
         },
         {
@@ -1924,42 +664,7 @@
             "total_accumulated_dose": 111.0,
             "nominal_tilt_angle": 54.0009,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_036_54.0.mrc"
         },
         {
@@ -1977,42 +682,7 @@
             "total_accumulated_dose": 114.0,
             "nominal_tilt_angle": 57.0,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_037_57.0.mrc"
         },
         {
@@ -2030,42 +700,7 @@
             "total_accumulated_dose": 117.0,
             "nominal_tilt_angle": -56.9985,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_038_-57.0.mrc"
         },
         {
@@ -2083,42 +718,7 @@
             "total_accumulated_dose": 120.0,
             "nominal_tilt_angle": -59.9986,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_039_-60.0.mrc"
         },
         {
@@ -2136,42 +736,7 @@
             "total_accumulated_dose": 123.0,
             "nominal_tilt_angle": 60.0006,
             "refined_tilt_angle": null,
-            "alignment_transformations": {
-                "annotations": [],
-                "translation": {
-                    "annotations": [],
-                    "transform_type": "translation",
-                    "trans_matrix": [
-                        [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            1.0,
-                            0.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            1.0,
-                            0.0
-                        ],
-                        [
-                            0.0,
-                            0.0,
-                            0.0,
-                            1.0
-                        ]
-                    ]
-                },
-                "x_tilt": 0.0,
-                "y_tilt": 0.0,
-                "z_rot": 0.0
-            },
+            "alignment_transformations": null,
             "path": "frames/TS_01_040_60.0.mrc"
         }
     ],

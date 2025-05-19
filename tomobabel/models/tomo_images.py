@@ -10,8 +10,7 @@ from tomobabel.models.basemodels import (
     Image3D,
     CoordsLogical,
 )
-from tomobabel.models.transformations import Transformation, TranslationTransform
-from tomobabel.models.transformations import AffineTransform
+from tomobabel.models.transformations import Transformation
 
 
 class GainFile(Image2D):
@@ -134,7 +133,7 @@ class MovieStackSet(ConfiguredBaseModel):
         default_factory=list, description="The movie stacks"
     )
     tilt_series: List[TiltSeriesMicrographStack] = Field(
-        default_factory=[],
+        default_factory=list,
         description="Sets of tilt series micrographs from this set of movie stacks",
     )
 
@@ -160,8 +159,8 @@ class TiltSeriesMicrographAlignment(ConfiguredBaseModel):
     Describes the transformations to align a micrograph in a tilt series
     """
 
-    translation: TranslationTransform = Field(
-        default=TranslationTransform(),
+    translation: Optional[Transformation] = Field(
+        default=None,
         description="Matrix that describes the translations for alignment",
     )
     x_tilt: float = Field(default=0.0, description="Tilt in x in degrees")
@@ -186,8 +185,8 @@ class TiltSeriesMicrograph(Image2D):
     refined_tilt_angle: Optional[float] = Field(
         default=None, description="The tilt angle after refinement in degrees"
     )
-    alignment_transformations: TiltSeriesMicrographAlignment = Field(
-        default=TiltSeriesMicrographAlignment(),
+    alignment_transformations: Optional[TiltSeriesMicrographAlignment] = Field(
+        default=None,
         description="Transformations applied for tilt series alignment",
     )
     path: str = Field(
@@ -221,7 +220,7 @@ class TiltSeriesSet(ConfiguredBaseModel):
     """
 
     tilt_series: List[TiltSeriesMicrographStack] = Field(
-        default=...,
+        default_factory=list,
         description="The TiltSeriesMicrographStacks associated with this Region",
     )
 
@@ -231,7 +230,7 @@ class Tomogram(Image3D):
 
     file: Optional[str] = Field(default=None, description="Path to the file")
     subtomograms: List[SubTomogramSet] = Field(
-        default_factory=[],
+        default_factory=list,
         description="Sets of subtomograms extracted from this tomogram",
     )
 
@@ -242,7 +241,7 @@ class TomogramSet(ConfiguredBaseModel):
     """
 
     tomograms: List[Tomogram] = Field(
-        default_factory=[],
+        default_factory=list,
         description="A set of tomograms created from these tilt series micrographs",
     )
 
@@ -252,7 +251,7 @@ class SubTomogram(Image3D):
     Holds a sub tomogram
     """
 
-    alignment_transformation: Optional[AffineTransform] = Field(
+    alignment_transformation: Optional[Transformation] = Field(
         default=None, description="The transformation applied to align this subtomo"
     )
     ctf_metadata: Optional[CTFMetadata] = Field(
@@ -270,10 +269,11 @@ class SubTomogramSet(ConfiguredBaseModel):
     """
 
     Subtomograms: List[SubTomogram] = Field(
-        default_factory=[], description="Sets of subtomograms extracted from a tomogram"
+        default_factory=list,
+        description="Sets of subtomograms extracted from a tomogram",
     )
     maps: List[Map] = Field(
-        default_factory=[], description="Maps derived from this set of subtomograms"
+        default_factory=list, description="Maps derived from this set of subtomograms"
     )
 
 

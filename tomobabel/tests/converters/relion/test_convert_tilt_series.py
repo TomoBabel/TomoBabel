@@ -20,7 +20,7 @@ from tomobabel.models.tomo_images import (
     DefectFile,
     TiltSeriesMicrographAlignment,
 )
-from tomobabel.models.transformations import MotionCorrectionTransformation
+from tomobabel.models.transformations import Transformation
 from tomobabel.models.basemodels import Annotation
 from tomobabel.tests.converters.relion.relion_testing_utils import TomoBabelRelionTest
 from tomobabel.utils import clean_dict
@@ -117,7 +117,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
         )
         ctfdata = converter.get_ctf_data(block, 0)
         assert isinstance(ctfdata, CTFMetadata)
-        assert ctfdata.model_dump() == {
+        assert ctfdata.model_dump(mode="json") == {
             "defocus_u": 38855.828125,
             "defocus_v": 38750.828125,
             "defocus_angle": 35.154533,
@@ -185,7 +185,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
                 accumulated_dose=2.5,
                 ctf_metadata=None,
                 motion_correction_transformations=[
-                    MotionCorrectionTransformation(
+                    Transformation(
                         annotations=[
                             Annotation(
                                 type="text",
@@ -208,7 +208,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
                 accumulated_dose=3.5,
                 ctf_metadata=None,
                 motion_correction_transformations=[
-                    MotionCorrectionTransformation(
+                    Transformation(
                         annotations=[
                             Annotation(
                                 type="text",
@@ -231,7 +231,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
                 accumulated_dose=4.5,
                 ctf_metadata=None,
                 motion_correction_transformations=[
-                    MotionCorrectionTransformation(
+                    Transformation(
                         annotations=[
                             Annotation(
                                 type="text",
@@ -254,7 +254,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
                 accumulated_dose=5.5,
                 ctf_metadata=None,
                 motion_correction_transformations=[
-                    MotionCorrectionTransformation(
+                    Transformation(
                         annotations=[
                             Annotation(
                                 type="text",
@@ -277,7 +277,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
                 accumulated_dose=6.5,
                 ctf_metadata=None,
                 motion_correction_transformations=[
-                    MotionCorrectionTransformation(
+                    Transformation(
                         annotations=[
                             Annotation(
                                 type="text",
@@ -300,7 +300,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
                 accumulated_dose=7.5,
                 ctf_metadata=None,
                 motion_correction_transformations=[
-                    MotionCorrectionTransformation(
+                    Transformation(
                         annotations=[
                             Annotation(
                                 type="text",
@@ -323,7 +323,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
                 accumulated_dose=8.5,
                 ctf_metadata=None,
                 motion_correction_transformations=[
-                    MotionCorrectionTransformation(
+                    Transformation(
                         annotations=[
                             Annotation(
                                 type="text",
@@ -346,7 +346,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
                 accumulated_dose=9.5,
                 ctf_metadata=None,
                 motion_correction_transformations=[
-                    MotionCorrectionTransformation(
+                    Transformation(
                         annotations=[
                             Annotation(
                                 type="text",
@@ -369,7 +369,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
                 accumulated_dose=10.5,
                 ctf_metadata=None,
                 motion_correction_transformations=[
-                    MotionCorrectionTransformation(
+                    Transformation(
                         annotations=[
                             Annotation(
                                 type="text",
@@ -392,7 +392,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
                 accumulated_dose=11.5,
                 ctf_metadata=None,
                 motion_correction_transformations=[
-                    MotionCorrectionTransformation(
+                    Transformation(
                         annotations=[
                             Annotation(
                                 type="text",
@@ -432,13 +432,13 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
 
         amc_dict = {}
         for i in converter.all_movie_collections:
-            amc_dict[i] = converter.all_movie_collections[i].model_dump()
+            amc_dict[i] = converter.all_movie_collections[i].model_dump(mode="json")
         with open(self.test_data / "import_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
         assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
         ats_dict = {}
         for i in converter.all_tilt_series:
-            ats_dict[i] = converter.all_tilt_series[i].model_dump_json()
+            ats_dict[i] = converter.all_tilt_series[i].model_dump(mode="json")
         with open(self.test_data / "import_all_tilt_series.json") as ats:
             ats_actual = json.load(ats)
         assert not DeepDiff(clean_dict(ats_dict), ats_actual, ignore_order=True)
@@ -455,14 +455,14 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
 
         amc_dict = {}
         for i in converter.all_movie_collections:
-            amc_dict[i] = converter.all_movie_collections[i].model_dump()
+            amc_dict[i] = converter.all_movie_collections[i].model_dump(mode="json")
         with open(self.test_data / "ctf_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
         assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
 
         ats_dict = {}
         for i in converter.all_tilt_series:
-            ats_dict[i] = converter.all_tilt_series[i].model_dump()
+            ats_dict[i] = converter.all_tilt_series[i].model_dump(mode="json")
         with open(self.test_data / "ctf_all_tilt_series.json") as ats:
             ats_actual = json.load(ats)
         assert not DeepDiff(clean_dict(ats_dict), ats_actual, ignore_order=True)
@@ -482,14 +482,14 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
 
         amc_dict = {}
         for i in converter.all_movie_collections:
-            amc_dict[i] = converter.all_movie_collections[i].model_dump()
+            amc_dict[i] = converter.all_movie_collections[i].model_dump(mode="json")
         with open(self.test_data / "ctf_all_movie_cols_gain_defect.json") as amc:
             amc_actual = json.load(amc)
         assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
 
         ats_dict = {}
         for i in converter.all_tilt_series:
-            ats_dict[i] = converter.all_tilt_series[i].model_dump()
+            ats_dict[i] = converter.all_tilt_series[i].model_dump(mode="json")
         with open(self.test_data / "ctf_all_tilt_series.json") as ats:
             ats_actual = json.load(ats)
         assert not DeepDiff(clean_dict(ats_dict), ats_actual, ignore_order=True)
@@ -507,14 +507,14 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
 
         amc_dict = {}
         for i in converter.all_movie_collections:
-            amc_dict[i] = converter.all_movie_collections[i].model_dump()
+            amc_dict[i] = converter.all_movie_collections[i].model_dump(mode="json")
         with open(self.test_data / "mocorr_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
         assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
 
         ats_dict = {}
         for i in converter.all_tilt_series:
-            ats_dict[i] = converter.all_tilt_series[i].model_dump()
+            ats_dict[i] = converter.all_tilt_series[i].model_dump(mode="json")
         with open(self.test_data / "mocorr_all_tilt_series.json") as ats:
             ats_actual = json.load(ats)
         assert not DeepDiff(clean_dict(ats_dict), ats_actual, ignore_order=True)
@@ -531,14 +531,14 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
 
         amc_dict = {}
         for i in converter.all_movie_collections:
-            amc_dict[i] = converter.all_movie_collections[i].model_dump()
+            amc_dict[i] = converter.all_movie_collections[i].model_dump(mode="json")
         with open(self.test_data / "aligned_ts_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
         assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
 
         ats_dict = {}
         for i in converter.all_tilt_series:
-            ats_dict[i] = converter.all_tilt_series[i].model_dump()
+            ats_dict[i] = converter.all_tilt_series[i].model_dump(mode="json")
         with open(self.test_data / "aligned_ts_all_tilt_series.json") as ats:
             ats_actual = json.load(ats)
         assert not DeepDiff(clean_dict(ats_dict), ats_actual, ignore_order=True)

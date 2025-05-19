@@ -12,7 +12,7 @@ from tomobabel.models.basemodels import (
     AnnotationSet,
     AnnotationSetTypes,
 )
-from tomobabel.models.transformations import AffineTransform
+from tomobabel.models.transformations import Transformation
 
 
 # TODO: give all these helper properties like center, corners vector and etc,
@@ -56,7 +56,7 @@ class Cone(Annotation):
         default=..., description="Vector for the center line of the cone"
     )
     start_radius: float = Field(
-        default=..., description="Diameter of the base of the cone"
+        default=..., description="Radius of the base of the cone"
     )
     end_radius: float = Field(
         default=0.0,
@@ -69,7 +69,7 @@ class Cone(Annotation):
 
 class Cuboid(Annotation):
     """
-    A cuboid (3D) or rectangular (2D) box defined by two or three vectors
+    A cuboid (3D) or rectangular (2D) box defined by two vectors
 
     Vectors point to two diagonally opposite corners of the box
     """
@@ -115,8 +115,8 @@ class FitMap(Annotation):
     type: str = AnnotationType.map
     center: Point = Field(default=..., description="Coords of the center of the map")
     file: str = Field(default=..., description="Path to the map file")
-    transformation: AffineTransform = Field(
-        default=AffineTransform(),
+    transformation: Optional[Transformation] = Field(
+        default=None,
         description=(
             "Tranformation applied to fit the map. IE: Affine transform for rotation"
         ),
@@ -180,8 +180,9 @@ class Particle(Point):
     fom: Optional[float] = Field(
         default=None, description="Figure of merit for autopicking"
     )
-    alignment_transformations: List[AffineTransform] = Field(
-        default_factory=[], description="Transformations applied to align this particle"
+    alignment_transformations: List[Transformation] = Field(
+        default_factory=list,
+        description="Transformations applied to align this particle",
     )
 
 
@@ -285,7 +286,7 @@ class ParticleCoordinatesSet(AnnotationSet):
 
     type: str = AnnotationSetTypes.particle_coords
     particles: List[Particle] = Field(
-        default_factory=[], description="Picked particle coorindates"
+        default_factory=list, description="Picked particle coorindates"
     )
 
 

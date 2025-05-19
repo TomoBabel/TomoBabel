@@ -9,6 +9,7 @@
                         "description": "Raw images for tilt series name: TS_01"
                     }
                 ],
+                "tilt_series": [],
                 "movie_stacks": [
                     {
                         "annotations": [],
@@ -10768,6 +10769,7 @@
                         "description": "Raw images for tilt series name: TS_03"
                     }
                 ],
+                "tilt_series": [],
                 "movie_stacks": [
                     {
                         "annotations": [],
@@ -21527,6 +21529,7 @@
                         "description": "Raw images for tilt series name: TS_43"
                     }
                 ],
+                "tilt_series": [],
                 "movie_stacks": [
                     {
                         "annotations": [],
@@ -34910,6 +34913,7 @@
                         "description": "Raw images for tilt series name: TS_45"
                     }
                 ],
+                "tilt_series": [],
                 "movie_stacks": [
                     {
                         "annotations": [],
@@ -48293,6 +48297,7 @@
                         "description": "Raw images for tilt series name: TS_54"
                     }
                 ],
+                "tilt_series": [],
                 "movie_stacks": [
                     {
                         "annotations": [],

@@ -15,7 +15,7 @@ class DataSet(ConfiguredBaseModel):
 
     name: str = Field(default="", description="Name for this dataset")
     regions: List[Region] = Field(
-        default_factory=[], description="All regions in the dataset"
+        default_factory=list, description="All regions in the dataset"
     )
 
 
@@ -44,7 +44,7 @@ class NonTomoImageSet(ConfiguredBaseModel):
     """A set of images that are not part of a tomographic tiltseries or tomogram"""
 
     images: List[Union[Image3D, Image2D]] = Field(
-        default_factory=[], description="A list of non-tomographic images"
+        default_factory=list, description="A list of non-tomographic images"
     )
 
 

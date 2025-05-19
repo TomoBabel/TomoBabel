@@ -21,10 +21,7 @@ from tomobabel.models.tomo_images import (
 )
 from tomobabel.models.top_level import TomoImageSet
 from tomobabel.models.tomo_images import TiltSeriesMicrographAlignment
-from tomobabel.models.transformations import (
-    TranslationTransform,
-    MotionCorrectionTransformation,
-)
+from tomobabel.models.transformations import Transformation, TransformationType
 from tomobabel.models.annotation import Annotation
 from tomobabel.utils import get_mrc_dims, NumpyEncoder
 
@@ -174,7 +171,8 @@ class PipelinerTiltSeriesGroupConverter(object):
         self.motioncorrection_job...
         """
         # TODO: Replace this placeholder with actual function
-        return MotionCorrectionTransformation(
+        return Transformation(
+            transform_type=TransformationType.translation,
             trans_matrix=np.identity(2),
             annotations=[
                 Annotation(
@@ -366,7 +364,7 @@ class PipelinerTiltSeriesGroupConverter(object):
             transformation_obj.y_tilt = ytilt
             transformation_obj.x_tilt = xtilt
             transformation_obj.z_rot = rot
-            transformation_obj.translation = TranslationTransform(
+            transformation_obj.translation = Transformation(
                 trans_matrix=np.array([[xshift, 0], [0, yshift]])
             )
 

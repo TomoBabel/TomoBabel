@@ -25,7 +25,7 @@ class CziiConverterTest(TomoBabelRelionTest):
         )
         with open(self.test_data / "ctf_dataset.json") as exp:
             expected = json.load(exp)
-        assert dataset.model_dump_json() == expected
+        assert dataset.model_dump(mode="json") == expected
 
 
 if __name__ == "__main__":
