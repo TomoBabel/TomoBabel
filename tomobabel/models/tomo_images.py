@@ -132,25 +132,15 @@ class MovieStackSet(ConfiguredBaseModel):
     movie_stacks: List[MovieStack] = Field(
         default_factory=list, description="The movie stacks"
     )
-    tilt_series: List[TiltSeriesMicrographStack] = Field(
-        default_factory=list,
-        description="Sets of tilt series micrographs from this set of movie stacks",
-    )
-
-
-class MovieStackCollection(ConfiguredBaseModel):
-    """
-    A collection of movie stacks using the same gain and defect files.
-    """
-
-    movie_stack_sets: List[MovieStackSet] = Field(
-        default_factory=list, description="The movie stacks in the collection"
-    )
     gain_file: Optional[GainFile] = Field(
         default=None, description="The gain file for the movie stacks"
     )
     defect_file: Optional[DefectFile] = Field(
         default=None, description="The defect file for the movie stacks"
+    )
+    tilt_series: List[TiltSeriesMicrographStack] = Field(
+        default_factory=list,
+        description="Sets of tilt series micrographs from this set of movie stacks",
     )
 
 
@@ -295,7 +285,6 @@ GainFile.model_rebuild()
 Map.model_rebuild()
 MovieFrame.model_rebuild()
 MovieStack.model_rebuild()
-MovieStackCollection.model_rebuild()
 MovieStackSet.model_rebuild()
 SubTomogram.model_rebuild()
 SubTomogramSet.model_rebuild()

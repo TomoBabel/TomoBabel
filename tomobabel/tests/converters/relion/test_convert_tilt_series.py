@@ -58,7 +58,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
         )
         assert converter.__dict__ == {
             "input_file": PosixPath("Import/job001/tilt_series.star"),
-            "all_movie_collections": {},
+            "all_movie_sets": {},
             "all_tilt_series": {},
             "ts_files": {},
             "defect_file": None,
@@ -172,7 +172,7 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
             czii_movie_frames=None,
             apix=0.675,
         )
-        converter.make_movie_collections(block, 0, mov)
+        converter.make_movie_sets(block, 0, mov)
         expected = [
             MovieFrame(
                 annotations=[],
@@ -431,8 +431,8 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
         converter.do_conversion()
 
         amc_dict = {}
-        for i in converter.all_movie_collections:
-            amc_dict[i] = converter.all_movie_collections[i].model_dump(mode="json")
+        for i in converter.all_movie_sets:
+            amc_dict[i] = converter.all_movie_sets[i].model_dump(mode="json")
         with open(self.test_data / "import_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
         assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
@@ -454,8 +454,8 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
         converter.do_conversion()
 
         amc_dict = {}
-        for i in converter.all_movie_collections:
-            amc_dict[i] = converter.all_movie_collections[i].model_dump(mode="json")
+        for i in converter.all_movie_sets:
+            amc_dict[i] = converter.all_movie_sets[i].model_dump(mode="json")
         with open(self.test_data / "ctf_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
         assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
@@ -481,8 +481,8 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
         converter.do_conversion()
 
         amc_dict = {}
-        for i in converter.all_movie_collections:
-            amc_dict[i] = converter.all_movie_collections[i].model_dump(mode="json")
+        for i in converter.all_movie_sets:
+            amc_dict[i] = converter.all_movie_sets[i].model_dump(mode="json")
         with open(self.test_data / "ctf_all_movie_cols_gain_defect.json") as amc:
             amc_actual = json.load(amc)
         assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
@@ -506,8 +506,8 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
         converter.do_conversion()
 
         amc_dict = {}
-        for i in converter.all_movie_collections:
-            amc_dict[i] = converter.all_movie_collections[i].model_dump(mode="json")
+        for i in converter.all_movie_sets:
+            amc_dict[i] = converter.all_movie_sets[i].model_dump(mode="json")
         with open(self.test_data / "mocorr_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
         assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
@@ -530,8 +530,8 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
         converter.do_conversion()
 
         amc_dict = {}
-        for i in converter.all_movie_collections:
-            amc_dict[i] = converter.all_movie_collections[i].model_dump(mode="json")
+        for i in converter.all_movie_sets:
+            amc_dict[i] = converter.all_movie_sets[i].model_dump(mode="json")
         with open(self.test_data / "aligned_ts_all_movie_cols.json") as amc:
             amc_actual = json.load(amc)
         assert not DeepDiff(clean_dict(amc_dict), amc_actual, ignore_order=True)
@@ -561,20 +561,20 @@ class CziiTiltSeriesConverterTest(TomoBabelRelionTest):
         )
         wrote_files = list(Path("outdir").glob("*.json"))
         for f in [
-            "TS_01_movie_collection.json",
+            "TS_01_movie_set.json",
             "TS_01_tilt_series.json",
-            "TS_03_movie_collection.json",
+            "TS_03_movie_set.json",
             "TS_03_tilt_series.json",
-            "TS_43_movie_collection.json",
+            "TS_43_movie_set.json",
             "TS_43_tilt_series.json",
-            "TS_45_movie_collection.json",
+            "TS_45_movie_set.json",
             "TS_45_tilt_series.json",
-            "TS_54_movie_collection.json",
+            "TS_54_movie_set.json",
             "TS_54_tilt_series.json",
         ]:
             assert Path("outdir") / f in wrote_files, Path(f)
         # check one movies file
-        with open("outdir/TS_01_movie_collection.json") as wrote:
+        with open("outdir/TS_01_movie_set.json") as wrote:
             wrote_data = json.load(wrote)
         with open(self.test_data / "TS_01_movie_collections.json") as exp:
             expected = json.load(exp)

@@ -9,7 +9,6 @@ from typing import Optional, List, Dict, Tuple
 from gemmi import cif
 
 from tomobabel.models.tomo_images import (
-    MovieStackCollection,
     MovieStack,
     MovieFrame,
     CTFMetadata,
@@ -136,7 +135,7 @@ class PipelinerTiltSeriesGroupConverter(object):
     Attributes:
         input_file (Path): The RELION tilt series starfile. TiltSeriesGroupMetadata node
             type
-        all_movie_collections (Dict[str, MovieStackCollection]): The CETS
+        all_movie_sets (Dict[str, MovieStackCollection]): The CETS
             MovieStackCollection for each tiltseries in the input file
             {tilt_series_name: MovieStackCollection}
         all_tilt_series (Dict[str, TiltSeries]): The CETS TiltSeries for each tiltseries
@@ -157,7 +156,7 @@ class PipelinerTiltSeriesGroupConverter(object):
         motion_correction_job: Optional[str] = None,
     ) -> None:
         self.input_file = input_file
-        self.all_movie_collections: Dict[str, MovieStackCollection] = {}
+        self.all_movie_sets: Dict[str, MovieStackSet] = {}
         self.all_tilt_series: Dict[str, TomoImageSet] = {}
         self.ts_files: Dict[str, str] = {}
         self.gain_file = gain_file
@@ -370,10 +369,10 @@ class PipelinerTiltSeriesGroupConverter(object):
 
         return transformation_obj
 
-    def make_movie_collections(
+    def make_movie_sets(
         self, tilt_series_block: cif.Block, section: int, mov: RelionTiltSeriesMovie
     ) -> None:
-        """Make a CETS MovieStackCollection Object for each tilt series and update its
+        """Make a CETS MovieStackSet Object for each tilt series and update its
         RelionTiltSeriesMovie object
 
         CTF and transformation are the same for every frame in the movie
@@ -480,9 +479,10 @@ class PipelinerTiltSeriesGroupConverter(object):
 
             # make the MovieFrame Object for each frame in every movie
             for n, mov in enumerate(movies):
-                self.make_movie_collections(tilt_series_block, n, mov)
+                self.make_movie_sets(tilt_series_block, n, mov)
 
             # make the MovieStackSet objects
+            gainfile, defectfile = self.get_gain_ref_and_defect_file()
             ms_series = MovieStackSet(
                 movie_stacks=[x.czii_movie_stack for x in movies],
                 annotations=[
@@ -490,20 +490,15 @@ class PipelinerTiltSeriesGroupConverter(object):
                         description=f"Raw images for tilt series name: {ts_name}"
                     )
                 ],
-            )
-            gainfile, defectfile = self.get_gain_ref_and_defect_file()
-            collection = MovieStackCollection(
-                movie_stack_sets=[ms_series],
                 gain_file=gainfile,
                 defect_file=defectfile,
             )
-            self.all_movie_collections[str(ts_name)] = collection
-
             # Make a TiltSeries object for the tilt series
             ts_obj = self.make_tilt_series_object(
                 path=self.ts_files[ts_name], stacks=ms_series
             )
             self.all_tilt_series[str(ts_name)] = ts_obj
+            self.all_movie_sets[str(ts_name)] = ms_series
 
 
 def get_arguments() -> argparse.ArgumentParser:
@@ -593,12 +588,12 @@ def main(in_args=None) -> PipelinerTiltSeriesGroupConverter:
             with open(outfile, "w") as to_write:
                 json.dump(ts_dict, to_write, indent=4, cls=NumpyEncoder)
 
-        for movie_collection in converter.all_movie_collections:
+        for movie_set in converter.all_movie_sets:
             if out.is_dir():
-                outfile = out / f"{movie_collection}_movie_collection.json"
+                outfile = out / f"{movie_set}_movie_set.json"
             else:
-                outfile = Path(str(out) + f"_{movie_collection}_movie_collection.json")
-            mc_dict = converter.all_movie_collections[movie_collection].model_dump()
+                outfile = Path(str(out) + f"_{movie_set}_movie_set.json")
+            mc_dict = converter.all_movie_sets[movie_set].model_dump()
             with open(outfile, "w") as to_write:
                 json.dump(mc_dict, to_write, indent=4, cls=NumpyEncoder)
 

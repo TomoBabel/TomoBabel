@@ -119,9 +119,7 @@ def main(in_args=None) -> DataSet:
     )
     regions = []
     for tilt_series in converted_tilt_series.all_tilt_series:
-        movie_stack_collections = converted_tilt_series.all_movie_collections[
-            tilt_series
-        ]
+        movie_stack_collections = converted_tilt_series.all_movie_sets[tilt_series]
         tiltseries_container = TomoImageSet(raw_movies=movie_stack_collections)
         region = Region(tomo_imaging=[tiltseries_container])
         regions.append(region)

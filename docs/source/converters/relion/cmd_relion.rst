@@ -146,13 +146,13 @@ As a module:
         "my_defect.mrc,
     ]
  )
- >>> converter.all_movie_collections
+ >>> converter.all_movie_sets
     {
-        "TS_01": MovieCollection,
-        "TS_03": MovieCollection,
-        "TS_35": MovieCollection,
-        "TS_45": MovieCollection,
-        "TS_54": MovieCollection,
+        "TS_01": MovieSet,
+        "TS_03": MovieSet,
+        "TS_35": MovieSet,
+        "TS_45": MovieSet,
+        "TS_54": MovieSet,
     }
  >>> converter.all_tilt_series
     {
