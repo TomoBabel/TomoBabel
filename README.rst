@@ -1,3 +1,8 @@
+.. image:: docs/files/models_diagram.png
+  :width: 350
+  :alt: CETS data model
+  :align: center
+
 ==================================================================
 Cryo Electron Tomography Standard (CETS) data format and TomoBabel
 ==================================================================
