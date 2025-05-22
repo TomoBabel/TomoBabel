@@ -1,8 +1,3 @@
-.. image:: docs/files/tblogo.png
-  :width: 350
-  :alt: TomoBabel logo
-  :align: center
-
 ==================================================================
 Cryo Electron Tomography Standard (CETS) data format and TomoBabel
 ==================================================================

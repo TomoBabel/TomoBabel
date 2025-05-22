@@ -1,8 +1,3 @@
-.. image:: files/tblogo.png
-  :width: 350
-  :alt: TomoBabel logo
-  :align: center
-
 ===============
 TomoBabel
 ===============
