@@ -1,5 +1,5 @@
 .. image:: docs/files/models_diagram.png
-  :width: 350
+  :width: 800
   :alt: CETS data model
   :align: center
 
