@@ -1,6 +1,6 @@
 from typing import List
 from warnings import warn
-from pydantic import model_validator, Field
+from pydantic import model_validator, PrivateAttr
 import re
 from tomobabel.models.basemodels import ConfiguredBaseModel
 from tomobabel.models.ebi_compatibility.ebi_cats import DEPOBJ_CATS
@@ -12,14 +12,8 @@ class EbiLinkedBaseModel(ConfiguredBaseModel):
     against them
     """
 
-    ebi_scheme_name: str = Field(
-        default="",
-        description=(
-            "The name of the field in the EBI schema that corresponds to this model"
-            " there needs to be a 1:1 correspondance between the Fields in the model"
-            " and the fields in that EBI scheme"
-        ),
-    )
+    # This is the field in the EBI dict that this model corresponds to
+    _ebi_scheme_name: str = PrivateAttr(default="")
 
     @model_validator(mode="after")
     def validate_ebi_limited_fields(self):
@@ -29,11 +23,7 @@ class EbiLinkedBaseModel(ConfiguredBaseModel):
 
     @property
     def ebi_fields(self) -> List[str]:
-        fields = [
-            x
-            for x in self.__class__.model_fields.keys()
-            if x not in ("annotations", "ebi_scheme_name")
-        ]
+        fields = [x for x in self.__class__.model_fields.keys() if x != "annotations"]
         return fields
 
 
@@ -52,20 +42,20 @@ def validate_fields_against_ebi(cets_obj: EbiLinkedBaseModel) -> None:
 
     """
     for attr in cets_obj.ebi_fields:
-        ebi_dict = DEPOBJ_CATS[cets_obj.ebi_scheme_name]
+        ebi_dict = DEPOBJ_CATS[cets_obj._ebi_scheme_name]
         options = ebi_dict[attr]["options"]
         if getattr(cets_obj, attr) is not None:
             value = str(getattr(cets_obj, attr))
             if options and value not in options:
                 warn(
                     f"CETS model: {cets_obj.__class__.__name__}.{attr}: The value"
-                    f"{value} is not on the approved list of values in the EBI schema"
+                    f" {value} is not on the approved list of values in the EBI schema"
                     " for deposition in the PDB/EMDB"
                 )
             elif not re.match(str(ebi_dict[attr]["regex"]), value):
                 warn(
                     f"CETS model: {cets_obj.__class__.__name__}.{attr}: The value"
-                    " {value} does not satisfy the validation regex for this field in"
+                    f" {value} does not satisfy the validation regex for this field in"
                     " the EBI schema"
                 )
 
@@ -75,15 +65,15 @@ def match_ebi_linked_model_fields(cets_obj: EbiLinkedBaseModel) -> None:
     Check that the fields in an EbiLinkedBaseModel match the ebi schema.
 
     The EbiLinkedBaseModel does not have to contain every field for the EBI scheme for
-    that entry, but cannot containany additional fields.  If it does a standard
+    that entry, but cannot contain any additional fields.  If it does a standard
     ConfiguredBaseModel should be used instead.
     """
     bad_fields = []
     for field in cets_obj.ebi_fields:
-        ebi_dict = DEPOBJ_CATS.get(cets_obj.ebi_scheme_name)
+        ebi_dict = DEPOBJ_CATS.get(cets_obj._ebi_scheme_name)
         if not ebi_dict:
             raise ValueError(
-                f"{cets_obj.ebi_scheme_name} is not a valid EBI data model field"
+                f"{cets_obj._ebi_scheme_name} is not a valid EBI data model field"
             )
         elif str(field) not in ebi_dict.keys():
             bad_fields.append(field)

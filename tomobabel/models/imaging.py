@@ -12,7 +12,7 @@ from tomobabel.models.ebi_compatibility.ebi_validation import EbiLinkedBaseModel
 
 
 class SampleSupport(EbiLinkedBaseModel):
-    ebi_scheme_name: str = Field(default="em_sample_support")
+    _ebi_scheme_name: str = "em_sample_support"
     film_material: Optional[str] = Field(default=None, description="")
     grid_material: Optional[str] = Field(default=None, description="")
     grid_mesh_size: Optional[int] = Field(default=None, description="")
@@ -20,13 +20,13 @@ class SampleSupport(EbiLinkedBaseModel):
 
 
 class EmDetector(EbiLinkedBaseModel):
-    ebi_scheme_name: str = Field(default="em_detector")
+    _ebi_scheme_name: str = "em_detector"
     detective_quantum_efficiency: Optional[float] = Field(default=None, description="")
     mode: Optional[str] = Field(default=None, description="")
 
 
 class EmImagingParameters(EbiLinkedBaseModel):
-    ebi_scheme_name: str = Field(default="em_imaging")
+    _ebi_scheme_name: str = "em_imaging"
     microscope_model: Optional[str] = Field(default=None, description="")
     specimen_holder_type: Optional[str] = Field(default=None, description="")
     specimen_holder_model: Optional[str] = Field(default=None, description="")
@@ -48,7 +48,7 @@ class EmImagingParameters(EbiLinkedBaseModel):
 
 
 class EmVitrification(EbiLinkedBaseModel):
-    ebi_scheme_name: str = Field(default="em_vitrification")
+    _ebi_scheme_name: str = "em_vitrification"
     cryogen_name: Optional[str] = Field(default=None, description="")
     humidity: Optional[float] = Field(default=None, description="")
     temp: Optional[float] = Field(default=None, description="")
