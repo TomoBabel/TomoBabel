@@ -1,4 +1,4 @@
-.. image:: docs/files/models_diagram.png
+y.. image:: docs/files/models_diagram.png
   :width: 800
   :alt: CETS data model
   :align: center

@@ -6,6 +6,7 @@ from pydantic import Field
 
 from tomobabel.models.basemodels import ConfiguredBaseModel, Image2D, Image3D
 from tomobabel.models.tomo_images import MovieStackSet
+from tomobabel.models.imaging import EmImaging, EmSampleCreation
 
 
 class DataSet(ConfiguredBaseModel):
@@ -37,6 +38,12 @@ class Region(ConfiguredBaseModel):
 class TomoImageSet(ConfiguredBaseModel):
     raw_movies: Optional[MovieStackSet] = Field(
         default=None, description="Raw movies associated with this tilt series"
+    )
+    imaging_parameters: Optional[EmImaging] = Field(
+        default=None, description="Information about the microscope and imaging"
+    )
+    sample_creation: Optional[EmSampleCreation] = Field(
+        default=None, description="Information about sample preparation"
     )
 
 

@@ -1,7 +1,7 @@
 import json
 import unittest
 from unittest.mock import patch
-
+from deepdiff import DeepDiff
 from tomobabel.converters.relion import relion_converter
 from tomobabel.tests.converters.relion.relion_testing_utils import TomoBabelRelionTest
 
@@ -25,7 +25,7 @@ class CziiConverterTest(TomoBabelRelionTest):
         )
         with open(self.test_data / "ctf_dataset.json") as exp:
             expected = json.load(exp)
-        assert dataset.model_dump(mode="json") == expected
+        assert not DeepDiff(dataset.model_dump(mode="json"), expected)
 
 
 if __name__ == "__main__":
