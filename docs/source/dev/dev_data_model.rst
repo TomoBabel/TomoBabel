@@ -14,7 +14,7 @@ Editing the data model
 If you do edit the data model
 -----------------------------
 
-``scripts/draw_diagram.py`` can be used to update the graphic of the data model in
+``docs/scripts/draw_diagram.py`` can be used to update the graphic of the data model in
 the docs.
 
 This requires erdantic, which is most easily installed with conda
