@@ -17,7 +17,7 @@ license = {file = "LICENSE"}
 readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Science/Research",
@@ -31,23 +31,20 @@ classifiers = [
 ]
 
 dependencies = [
-    "gemmi==0.6.5",  # temporary downgrade to stop mypy errors
     "mrcfile",
     "numpy>=1.20.0",
     "pydantic>=2",
-    "linkml>=1.8.6"
 ]
 
 optional-dependencies.dev = [
-    "black==24.1.1",  # this version should match the one in .pre-commit-config.yaml
     "deepdiff",
-    "flake8==7.0.0",  # this version should match the one in .pre-commit-config.yaml
     "mypy==1.8.0",  # this version should match the one in .pre-commit-config.yaml
     "flake8-pyproject",
     "pre-commit",
     "pytest",
     "sniffio",
     "types-setuptools",
+    "ruff==0.11.12", # this version should match the one in .pre-commit-config.yaml
 ]
 
 optional-dependencies.docs = [
@@ -59,36 +56,6 @@ optional-dependencies.docs = [
 
 [project.urls]
 Repository = "https://github.com/TomoBabel"
-
-[tool.black]
-line-length = 88
-target-version = ['py39', 'py310', 'py311', 'py312']  # TODO: add py313, which requires a newer Black version
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.pytest_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-  | venv
-
-  # The following are specific to Black, you probably don't want those.
-  | blib2to3
-  | tests/data
-  | profiling
-)/
-'''
-
-[tool.flake8]
-max-line-length = 88
-max-complexity = 18
 
 # Ignore some warnings that are incompatible with black
 ignore = [
