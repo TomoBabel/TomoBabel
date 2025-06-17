@@ -57,22 +57,6 @@ optional-dependencies.docs = [
 [project.urls]
 Repository = "https://github.com/TomoBabel"
 
-# Ignore some warnings that are incompatible with black
-ignore = [
-    "E203",  # whitespace before `:`
-    "E266",  # too many leading `#` for block comment
-    "W503",  # line break before binary operator
-]
-
-exclude = [
-    ".git",
-    "__pycache__",
-    "_build",
-    "build",
-    "dist",
-    "venv",
-]
-
 [tool.mypy]
 files = ["tomobabel", "tests"]
 python_version = "3.9"
