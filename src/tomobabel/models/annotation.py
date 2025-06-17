@@ -35,12 +35,12 @@ class AnnotationType(str, Enum):
     text = "text"
 
 
-def check_input_dims(inputs: List[Point]) -> None:
+def check_input_dims(inputs: List[Union[CoordsLogical, Point]]) -> None:
     """
     Check the dimensions of input points match
 
     Args:
-        inputs (List[Point]): The input CETS Point objects
+        inputs (List[CoordsLogical]): The input CETS CoordsLogical objects
 
     Raises:
         ValueError: If the dimensionality of the points is not the same
@@ -89,7 +89,7 @@ class Cuboid(Annotation):
     @model_validator(mode="after")
     def validate_inputs(self) -> Cuboid:
         check_input_dims([self.v1.start, self.v2.start])
-        if not np.allclose(self.v1.start.coords, self.v2.start.coords):
+        if not np.allclose(self.v1.start.array, self.v2.start.array):
             raise ValueError("Both corner vectors must originate at the same point")
         return self
 
@@ -113,7 +113,9 @@ class FitMap(Annotation):
     """Annotation for a fitted map"""
 
     type: str = AnnotationType.map
-    center: Point = Field(default=..., description="Coords of the center of the map")
+    center: CoordsLogical = Field(
+        default=..., description="Coords of the center of the map"
+    )
     file: str = Field(default=..., description="Path to the map file")
     transformation: Optional[Transformation] = Field(
         default=None,
@@ -134,7 +136,7 @@ class Ovoid(Annotation):
     waist_radius: float = Field(
         default=..., description="The radius of the ovoid at its widest point"
     )
-    waist_point: Optional[Point] = Field(
+    waist_point: Optional[CoordsLogical] = Field(
         default=None,
         description=(
             "Coords of the point in the center vector where the ovoid is widest"
@@ -150,15 +152,15 @@ class Ovoid(Annotation):
     def model_post_init(self, __context) -> None:
         # calculate the waist point if not given
         if self.waist_point is None:
-            mids = (self.vector.start.coords + self.vector.end.coords) / 2
-            self.waist_point = Point(
+            mids = (self.vector.start.array + self.vector.end.array) / 2
+            self.waist_point = CoordsLogical(
                 x=mids[0, 0],
                 y=mids[1, 0],
                 z=None if self.vector.start.dim == 2 else mids[2, 0],
             )
         # verify waist point is on the central vector
-        v = self.vector.end.coords - self.vector.start.coords
-        w = self.waist_point.coords - self.vector.start.coords
+        v = self.vector.end.array - self.vector.start.array
+        w = self.waist_point.array - self.vector.start.array
 
         v_flat = v.flatten()
         w_flat = w.flatten()
@@ -171,8 +173,18 @@ class Ovoid(Annotation):
             raise ValueError("Ovoid waist point is not on central vector")
 
 
-class Point(CoordsLogical):
+class Point(Annotation):
     type: str = AnnotationType.point
+    coords: CoordsLogical = Field(
+        default=None, description="The coordinates of the point"
+    )
+
+    @property
+    def dim(self):
+        if self.coords.z:
+            return 3
+        else:
+            return 2
 
 
 class Particle(Point):
@@ -206,22 +218,22 @@ class Sphere(Annotation):
     """A sphere or circle of radius 'radius' centered on a coordinate"""
 
     type: str = AnnotationType.sphere
-    center: Point = Field(
+    center: CoordsLogical = Field(
         default=..., description="The center point of the circle/sphere"
     )
     radius: float = Field(default=..., description="The sphere radius")
 
     @property
     def center_point(self):
-        return self.center.coords
+        return self.center.array
 
 
 class Spline(Annotation):
     type: str = AnnotationType.spline
-    points: List[Point] = Field(default=..., description="At least two points")
+    points: List[CoordsLogical] = Field(default=..., description="At least two points")
 
     @field_validator("points")
-    def at_least_three_points(cls, value: List[Point]) -> List[Point]:
+    def at_least_three_points(cls, value: List[CoordsLogical]) -> List[CoordsLogical]:
         if len(value) < 3:
             raise ValueError("A spline must have at least 3 points")
         return value
@@ -236,8 +248,8 @@ class Vector(Annotation):
     """A vector defined by two points"""
 
     type: str = AnnotationType.vector
-    start: Point
-    end: Point
+    start: CoordsLogical
+    end: CoordsLogical
 
     @model_validator(mode="after")
     def input_dims_match(self) -> Vector:
@@ -252,8 +264,8 @@ class Vector(Annotation):
         Returns:
             np.ndarry: the start and end point arrays
         """
-        start_coords = self.start.coords
-        end_coords = self.end.coords
+        start_coords = self.start.array
+        end_coords = self.end.array
         return [start_coords, end_coords]
 
     @property

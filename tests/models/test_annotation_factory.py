@@ -11,19 +11,19 @@ p4 = np.array([[30.0], [40.0]])
 
 class AnnotationFactoryTest(TomoBabelTest):
     def test_make_point_3D(self):
-        p = point(coords=p1, text="3D point")
+        p = point(inarray=p1, text="3D point")
         assert isinstance(p, Point)
-        assert p.x == 10.0
-        assert p.y == 20.0
-        assert p.z == 30.0
+        assert p.coords.x == 10.0
+        assert p.coords.y == 20.0
+        assert p.coords.z == 30.0
         assert p.description == "3D point"
 
     def test_make_point_2D(self):
-        p = point(coords=p3, text="2D point")
+        p = point(inarray=p3, text="2D point")
         assert isinstance(p, Point)
-        assert p.x == 10.0
-        assert p.y == 20.0
-        assert p.z is None
+        assert p.coords.x == 10.0
+        assert p.coords.y == 20.0
+        assert p.coords.z is None
         assert p.description == "2D point"
 
     def test_make_vector_3D(self):
