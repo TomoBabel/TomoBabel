@@ -39,10 +39,8 @@ dependencies = [
 optional-dependencies.dev = [
     "deepdiff",
     "mypy==1.8.0",  # this version should match the one in .pre-commit-config.yaml
-    "flake8-pyproject",
     "pre-commit",
     "pytest",
-    "sniffio",
     "types-setuptools",
     "ruff==0.11.12", # this version should match the one in .pre-commit-config.yaml
 ]
